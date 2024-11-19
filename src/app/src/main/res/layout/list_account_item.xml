@@ -8,79 +8,90 @@
     android:layout_marginVertical="10dp"
     android:layout_marginHorizontal="10dp"
     app:cardElevation="8dp"
-    app:cardCornerRadius="10dp"
+    app:cardCornerRadius="20dp"
     android:elevation="8dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:orientation="vertical"
-        android:background="@drawable/ripple_effect">
-        <LinearLayout
+        android:background="@drawable/card_border"
+        android:padding="10dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/login_background"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
 
             <TextView
+                android:layout_margin="10dp"
                 android:id="@+id/idUser"
-                android:layout_width="215dp"
+                android:layout_width="215sp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
                 android:layout_gravity="center"
-                android:textSize="17dp"
-                android:textColor="@color/white"
+                android:textSize="17sp"
+                android:textColor="@color/main"
                 android:textStyle="bold"
-                android:text="id"/>
+                android:text="ID"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
 
             <Button
                 android:id="@+id/edit_account"
                 android:layout_width="55dp"
                 android:layout_height="40dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp"
                 android:padding="1dp"
                 android:text="Sửa"
                 app:backgroundTint="@null"
-                android:background="@drawable/ripple_effect"
-                android:textColor="#3B84F1"
-                android:textSize="12dp"/>
+                android:background="@drawable/rec_btn"
+                android:textColor="#fff"
+                android:textSize="12sp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/remove_account"
+                android:layout_marginEnd="10dp"
+                />
 
             <Button
                 android:id="@+id/remove_account"
                 android:layout_width="55dp"
                 android:layout_height="40dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp"
-                android:layout_marginStart="3dp"
                 android:padding="1dp"
                 android:text="Xóa"
                 app:backgroundTint="@null"
-                android:background="@drawable/ripple_effect"
-                android:textColor="#3B84F1"
-                android:textSize="12dp"/>
-        </LinearLayout>
-<!--
-        <LinearLayout
+                android:background="@drawable/rec_btn"
+                android:textColor="#fff"
+                android:textSize="12sp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textSize="15dp"
-                android:text="Mã người dùng: "/>
-            <TextView
-                android:id="@+id/idUser"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15dp"/>
-        </LinearLayout>
-  -->
+            android:layout_height="5dp"
+            android:background="@drawable/black_line"
+            android:layout_marginTop="5dp"/>
+        <!--
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textSize="15sp"
+                        android:text="Mã người dùng: "/>
+                    <TextView
+                        android:id="@+id/idUser"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"/>
+                </LinearLayout>
+          -->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -93,13 +104,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:text="Tài khoản: "
-                android:textSize="15dp"
+                android:textSize="15sp"
                 android:textStyle="bold" />
             <TextView
                 android:id="@+id/username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="15dp"/>
+                android:textSize="15sp"
+                android:text="@string/ex_name"/>
         </LinearLayout>
 
         <LinearLayout
@@ -112,13 +124,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
-                android:textSize="15dp"
+                android:textSize="15sp"
                 android:text="Mật khẩu: "/>
             <TextView
                 android:id="@+id/password"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="15dp"/>
+                android:textSize="15sp"
+                android:text="@string/ex_pass"/>
         </LinearLayout>
 
     </LinearLayout>

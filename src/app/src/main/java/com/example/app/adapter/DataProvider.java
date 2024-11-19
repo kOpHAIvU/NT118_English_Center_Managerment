@@ -395,11 +395,6 @@ public class DataProvider extends SQLiteOpenHelper {
                 Log.d("CREATE NOTIFICATION: ", e.getMessage());
             }
         }
-
-
-
-
-
     }
 
     private boolean isTableExists(SQLiteDatabase db, String tableName) {

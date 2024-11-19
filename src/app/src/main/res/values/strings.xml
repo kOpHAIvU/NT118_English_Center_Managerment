@@ -2,4 +2,14 @@
     <string name="app_name">App</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="ex_name">Nguyễn Văn A</string>
+    <string name="ex_date">12/10/2024</string>
+    <string name="ex_program">English_Center_Management</string>
+    <string name="ex_address">University of Information Technology</string>
+    <string name="ex_number">0908070605</string>
+    <string name="ex_gender">Male</string>
+    <string name="ex_course">NT118</string>
+    <string name="ex_content">Cuộc sống này ..... Quá khó khăn ..... </string>
+    <string name="ex_name_course">Lớp xoá mù công nghệ</string>
+    <string name="ex_pass">*****************</string>
 </resources>

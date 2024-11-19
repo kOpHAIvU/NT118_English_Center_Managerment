@@ -5,14 +5,29 @@
     android:layout_height="match_parent"
     tools:context=".activity.Fragment_Information">
 
-    <ListView
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/information_listview"
-        android:scrollbars="vertical"
-        android:layout_marginTop="5dp"
-        tools:listitem="@layout/list_item"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="10sp"/>
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:paddingTop="25dp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:layout_marginBottom="20dp"
+            android:src="@drawable/logo_az" />
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/information_listview"
+            android:scrollbars="vertical"
+            android:layout_marginTop="5dp"
+            tools:listitem="@layout/list_item"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="10sp"/>
+    </LinearLayout>
 
 </FrameLayout>
