@@ -23,15 +23,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="10dp" />
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="25dp"
+            android:layout_gravity="center">
 
-        <ImageView
-            android:layout_width="116dp"
-            android:layout_height="116dp"
-            android:layout_gravity="center"
-            android:src="@drawable/owl" />
+            <View
+                android:layout_width="132dp"
+                android:layout_height="132dp"
+                android:background="@drawable/circle_background" />
+
+            <ImageView
+                android:layout_width="116dp"
+                android:layout_height="116dp"
+                android:layout_gravity="center"
+                android:src="@drawable/logo_az" />
+
+        </FrameLayout>
 
         <EditText
             android:id="@+id/fullName"
@@ -40,8 +49,8 @@
             android:layout_gravity="center"
             android:layout_marginTop="5dp"
             android:gravity="center"
-            android:text=""
-            android:textSize="18dp"
+            android:text="Sukem"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
         <TextView
@@ -52,32 +61,9 @@
             android:gravity="center"
             android:text="Học viên chính thức"
             android:textColor="#8F0000"
-            android:textSize="14dp"
+            android:textSize="14sp"
             android:textStyle="bold" />
-        <!--
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
 
-                    <TextView
-                        android:layout_width="80dp"
-                        android:layout_height="24dp"
-                        android:textStyle="bold"
-                        android:layout_gravity="center"
-                        android:textSize="15dp"
-                        android:text="ID:"/>
-
-                    <EditText
-                        android:id="@+id/idStudent"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text=""
-                        android:textColor="@color/black"
-                        android:textSize="15dp" />
-                </LinearLayout>
-        -->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -91,7 +77,7 @@
                 android:layout_height="24dp"
                 android:textStyle="bold"
                 android:layout_gravity="center"
-                android:textSize="15dp"
+                android:textSize="15sp"
                 android:text="Địa chỉ:"/>
 
             <EditText
@@ -101,7 +87,7 @@
                 android:layout_gravity="center"
                 android:text=""
                 android:textColor="@color/black"
-                android:textSize="15dp" />
+                android:textSize="15sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -114,7 +100,7 @@
                 android:layout_height="24dp"
                 android:textStyle="bold"
                 android:layout_gravity="center"
-                android:textSize="15dp"
+                android:textSize="15sp"
                 android:text="Ngày sinh:"/>
 
             <TextView
@@ -127,7 +113,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:textColor="@color/black"
-                android:textSize="17dp" />
+                android:textSize="17sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -141,7 +127,7 @@
                 android:layout_height="24dp"
                 android:textStyle="bold"
                 android:layout_gravity="center"
-                android:textSize="15dp"
+                android:textSize="15sp"
                 android:text="SĐT:"/>
 
             <EditText
@@ -151,7 +137,7 @@
                 android:layout_gravity="center"
                 android:text=""
                 android:textColor="@color/black"
-                android:textSize="15dp" />
+                android:textSize="15sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -165,8 +151,8 @@
                 android:layout_height="24dp"
                 android:textStyle="bold"
                 android:layout_gravity="center"
-                android:textSize="15dp"
-                android:text="Phái:"/>
+                android:textSize="15sp"
+                android:text="Giới tính:"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -180,7 +166,7 @@
                     android:padding="8dp"
                     android:layout_width="110dp"
                     android:layout_height="wrap_content"
-                    android:textSize="15dp"
+                    android:textSize="15sp"
                     android:inputType="none"/>
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
@@ -196,7 +182,7 @@
                 android:layout_height="24dp"
                 android:textStyle="bold"
                 android:layout_gravity="center"
-                android:textSize="15dp"
+                android:textSize="15sp"
                 android:text="Ngày nộp:"/>
 
             <TextView
@@ -209,7 +195,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:textColor="@color/black"
-                android:textSize="17dp" />
+                android:textSize="17sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -223,7 +209,7 @@
                 android:layout_height="24dp"
                 android:textStyle="bold"
                 android:layout_gravity="center"
-                android:textSize="15dp"
+                android:textSize="15sp"
                 android:text="Học phí:"/>
 
             <EditText
@@ -232,13 +218,13 @@
                 android:layout_height="wrap_content"
                 android:text=""
                 android:textColor="@color/black"
-                android:textSize="15dp" />
+                android:textSize="15sp" />
 
             <TextView
                 android:layout_width="80dp"
                 android:layout_height="24dp"
                 android:layout_gravity="center"
-                android:textSize="15dp"
+                android:textSize="15sp"
                 android:text=" đồng"/>
         </LinearLayout>
 
@@ -256,7 +242,8 @@
                 android:layout_marginEnd="2dp"
                 android:layout_weight="1"
                 app:backgroundTint="@null"
-                android:background="@drawable/ripple_effect_2"
+                android:textSize="17sp"
+                android:background="@drawable/rec_btn"
                 android:text="Xong" />
 
             <Button
@@ -266,11 +253,10 @@
                 android:layout_marginStart="2dp"
                 android:layout_weight="1"
                 app:backgroundTint="@null"
-                android:background="@drawable/ripple_effect_2"
+                android:textSize="17sp"
+                android:background="@drawable/rec_btn"
                 android:text="Trở về" />
         </LinearLayout>
-
-
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
