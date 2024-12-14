@@ -53,7 +53,7 @@ public class Activity_Notifications_ToolBars_Second_Layer extends AppCompatActiv
 
         toolbar = findViewById(R.id.toolbar);
         listView = findViewById(R.id.notification_listview);
-        returnBtn = findViewById(R.id.return_btn);
+        returnBtn = findViewById(R.id.return_to_frag_btn);
 
         dataArrayList = new ArrayList<>();
         list = new ArrayList<>();
