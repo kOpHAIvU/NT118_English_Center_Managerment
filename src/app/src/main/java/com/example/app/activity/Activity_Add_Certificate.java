@@ -48,6 +48,5 @@ public class Activity_Add_Certificate extends AppCompatActivity {
                 }
             }
         });
-
     }
 }

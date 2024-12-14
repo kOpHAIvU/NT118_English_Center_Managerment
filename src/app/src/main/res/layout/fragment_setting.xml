@@ -3,12 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/setting_container"
     tools:context=".activity.Fragment_Setting">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="110dp"
+        android:contentDescription="TODO"
         android:src="@drawable/english_center"
         android:scaleType="centerCrop"/>
 
@@ -23,18 +25,30 @@
             android:layout_width="match_parent"
             android:layout_height="30dp"/>
 
-        <ImageView
-            android:layout_width="116dp"
-            android:layout_height="116dp"
-            android:layout_gravity="center"
-            android:src="@drawable/owl" />
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:layout_gravity="center">
+
+            <View
+                android:layout_width="132dp"
+                android:layout_height="132dp"
+                android:background="@drawable/circle_background" />
+
+            <ImageView
+                android:layout_width="116dp"
+                android:layout_height="116dp"
+                android:layout_gravity="center"
+                android:src="@drawable/logo_az" />
+        </FrameLayout>
 
         <TextView
             android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="Lê Gia Hoàng Thụ"
+            android:text="Nguyen Van A"
             android:layout_gravity="center"
             android:gravity="center"
             android:textSize="24dp"
@@ -183,23 +197,29 @@
         android:layout_marginTop="18dp"
         android:gravity="center">
 
-        <ImageButton
+        <Button
             android:id="@+id/setting_btn"
             android:layout_width="wrap_content"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="@drawable/rounded_btn"
             android:contentDescription="Cài đặt"
-            android:src="@drawable/baseline_manage_accounts_24" />
-        <ImageButton
+            android:drawableLeft="@drawable/baseline_manage_accounts_24"
+            android:background="@drawable/rec_btn"
+            android:text="Chỉnh sửa"
+            app:backgroundTint="@null"
+            android:layout_marginEnd = "10dp"/>
+
+        <Button
             android:id="@+id/logout_btn"
             android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:layout_marginStart="15dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="@drawable/rounded_btn"
             android:contentDescription="Đăng xuất"
-            android:src="@drawable/baseline_logout_24" />
+            android:drawableLeft="@drawable/baseline_logout_24"
+            android:background="@drawable/rec_btn"
+            android:text="Đăng xuất"
+            app:backgroundTint="@null"
+            />
     </LinearLayout>
 
 
