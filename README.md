@@ -6,3 +6,5 @@ nguyenthia thia123
 nguyenthic thic123
 nguyenthid thid123
 nguyenthie thie123
+
+UPDATE: xóa app trong máy ảo xong chạy lại, sau khi chạy xong lần đầu hãy comment dòng insertData(); ở dòng 170 Activity_Login.java
