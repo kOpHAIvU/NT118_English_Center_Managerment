@@ -42,7 +42,7 @@ public class CollectionTuitionFeesDAO {
         int maxId = DataProvider.getInstance(context).getMaxId("COLLECTING_TUITION_FEES", "ID_BILL");
 
         values.put("ID_BILL", "CTF" + String.valueOf(maxId + 1));
-        values.put("ID_TEACHING", collection.getIdStudent());
+        values.put("ID_STUDENT", collection.getIdStudent());
         values.put("COLLECTION_DATE", collection.getCollectionDate());
         values.put("TOTAL_MONEY", collection.getMoney());
         values.put("STATUS", 0);

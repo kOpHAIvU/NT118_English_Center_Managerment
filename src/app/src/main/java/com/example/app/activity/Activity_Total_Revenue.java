@@ -67,8 +67,7 @@ public class Activity_Total_Revenue extends AppCompatActivity {
     private static final int REQUEST_CODE_FOLDER = 1001;
     LineChart lineChart;
     List<String> xValues;
-    Button detailBtn, printBtn;
-    ImageButton returnFrag;
+    Button detailBtn, printBtn, returnFrag;
     String[] yearItem = {"2020", "2021", "2022","2023","2024"};
     AutoCompleteTextView year;
     ArrayAdapter<String> yearAdapter;
@@ -110,8 +109,8 @@ public class Activity_Total_Revenue extends AppCompatActivity {
         yAxis.setLabelCount(10);
 
         List<Entry> entries = new ArrayList<>();
-   /*     entries.add(new Entry(0,0f));
-       entries.add(new Entry(1,1f));
+        entries.add(new Entry(0,0f));
+        entries.add(new Entry(1,1f));
         entries.add(new Entry(2,2f));
         entries.add(new Entry(3,3f));
         entries.add(new Entry(4,0f));
@@ -122,53 +121,53 @@ public class Activity_Total_Revenue extends AppCompatActivity {
         entries.add(new Entry(9,1f));
         entries.add(new Entry(10,2f));
         entries.add(new Entry(11,3f));
-        entries.add(new Entry(12,3f));*/
-        entries.add(new Entry(0,0f));
+        entries.add(new Entry(12,3f));
+        //entries.add(new Entry(0,0f));
 
-        Map<Integer, Integer> collectingTuition = CollectionTuitionFeesDAO
-                .getInstance(Activity_Total_Revenue.this)
-                .SelectCollectionTuitionFeesByYear(Activity_Total_Revenue.this, "2024");
-        Log.d("List collecting revenue: ", collectingTuition.toString());
-
-        for (Integer value : collectingTuition.keySet()) {
-            Log.d("Revenue by month", String.valueOf(collectingTuition.get(value)));
-           // entries.add(new Entry(value, (collectingTuition.get(value) / 1000000000)/1.0f));
-            entries.add(new Entry(value, (float)(collectingTuition.get(value) / 10000000)));
-        }
+//        Map<Integer, Integer> collectingTuition = CollectionTuitionFeesDAO
+//                .getInstance(Activity_Total_Revenue.this)
+//                .SelectCollectionTuitionFeesByYear(Activity_Total_Revenue.this, "2024");
+//        Log.d("List collecting revenue: ", collectingTuition.toString());
+//
+//        for (Integer value : collectingTuition.keySet()) {
+//            Log.d("Revenue by month", String.valueOf(collectingTuition.get(value)));
+//           // entries.add(new Entry(value, (collectingTuition.get(value) / 1000000000)/1.0f));
+//            entries.add(new Entry(value, (float)(collectingTuition.get(value) / 10000000)));
+//        }
 
         year = findViewById(R.id.year);
         year.setText("2024");
         yearAdapter = new ArrayAdapter<String>(this, R.layout.combobox_item, yearItem);
         year.setAdapter(yearAdapter);
-        year.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                listRevenue = CollectionTuitionFeesDAO.getInstance(Activity_Total_Revenue.this)
-                        .SelectCollectionTuitionFeesToSummarizeRevenueByYear(
-                                Activity_Total_Revenue.this, year.getText().toString());
-                Log.d("List revenue log: ", listRevenue.toString());
-
-                Map<Integer, Integer> collectingTuition = CollectionTuitionFeesDAO
-                        .getInstance(Activity_Total_Revenue.this)
-                        .SelectCollectionTuitionFeesByYear(Activity_Total_Revenue.this,
-                                year.getText().toString());
-                Log.d("List collecting revenue: ", collectingTuition.toString());
-
-                entries.add(new Entry(0,0f));
-                for (Integer value : collectingTuition.keySet()) {
-                    Log.d("Revenue by month", String.valueOf(collectingTuition.get(value)));
-                    // entries.add(new Entry(value, (collectingTuition.get(value) / 1000000000)/1.0f));
-                    entries.add(new Entry(value, (float)(collectingTuition.get(value) / 10000000)));
-
-                }
-                LineDataSet dataSet = new LineDataSet(entries, "");
-                dataSet.setColor(Color.RED);
-            }
-        });
-        listRevenue = CollectionTuitionFeesDAO.getInstance(Activity_Total_Revenue.this)
-                .SelectCollectionTuitionFeesToSummarizeRevenueByYear(
-                        Activity_Total_Revenue.this, year.getText().toString());
+//        year.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//
+//                listRevenue = CollectionTuitionFeesDAO.getInstance(Activity_Total_Revenue.this)
+//                        .SelectCollectionTuitionFeesToSummarizeRevenueByYear(
+//                                Activity_Total_Revenue.this, year.getText().toString());
+//                Log.d("List revenue log: ", listRevenue.toString());
+//
+//                Map<Integer, Integer> collectingTuition = CollectionTuitionFeesDAO
+//                        .getInstance(Activity_Total_Revenue.this)
+//                        .SelectCollectionTuitionFeesByYear(Activity_Total_Revenue.this,
+//                                year.getText().toString());
+//                Log.d("List collecting revenue: ", collectingTuition.toString());
+//
+//                entries.add(new Entry(0,0f));
+//                for (Integer value : collectingTuition.keySet()) {
+//                    Log.d("Revenue by month", String.valueOf(collectingTuition.get(value)));
+//                    // entries.add(new Entry(value, (collectingTuition.get(value) / 1000000000)/1.0f));
+//                    entries.add(new Entry(value, (float)(collectingTuition.get(value) / 10000000)));
+//
+//                }
+//                LineDataSet dataSet = new LineDataSet(entries, "");
+//                dataSet.setColor(Color.RED);
+//            }
+//        });
+//        listRevenue = CollectionTuitionFeesDAO.getInstance(Activity_Total_Revenue.this)
+//                .SelectCollectionTuitionFeesToSummarizeRevenueByYear(
+//                        Activity_Total_Revenue.this, year.getText().toString());
 
         LineDataSet dataSet = new LineDataSet(entries, "");
         dataSet.setColor(Color.RED);
@@ -204,66 +203,66 @@ public class Activity_Total_Revenue extends AppCompatActivity {
         startActivityForResult(intent, REQUEST_CODE_FOLDER);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_FOLDER && resultCode == RESULT_OK) {
-            Uri uri = null;
-            if (data!= null) {
-                uri = data.getData();
-            }
-            saveCsvFile(uri);
-        }
-    }
-
-    private void saveCsvFile(Uri uri) {
-        try {
-            ContentResolver contentResolver = getContentResolver();
-            DocumentFile directory = DocumentFile.fromTreeUri(this, uri);
-
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-            String currentDateandTime = sdf.format(new Date());
-            String fileName = "report_" + currentDateandTime + ".csv";
-
-            // Tạo file mới trong thư mục được chọn
-            DocumentFile csvFile = directory.createFile("text/csv", fileName);
-
-            if (csvFile!= null && csvFile.exists()) {
-                OutputStream outputStream = contentResolver.openOutputStream(csvFile.getUri());
-                Writer writer = new BufferedWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
-
-                // Thêm BOM vào đầu file
-                writer.write("\ufeff");
-
-                // Header
-                writer.write("STT,Tháng,Mã lớp,Tên lớp,Chương trình đào tạo,Học phí,Số lượng học viên,Doanh thu");
-                writer.write(System.lineSeparator()); // Sử dụng System.lineSeparator() để thêm một dòng mới
-
-                // Write data from listRevenue
-                for (int i = 0; i < listRevenue.size(); i++) {
-                    RevenueReportByYear report = listRevenue.get(i);
-                    writer.write(String.format("%d,%d,%s,%s,%s,%d,%d,%d",
-                            i+1,
-                            report.getMonth(),
-                            report.getIdClass(),
-                            report.getNameClass(),
-                            report.getNameProgram(),
-                            report.getTuition(),
-                            report.getNumberOfStudents(),
-                            report.getRevenue()));
-                    writer.write(System.lineSeparator()); // Sử dụng System.lineSeparator() để thêm một dòng mới
-                }
-
-                writer.close();
-                Toast.makeText(this, "File saved successfully", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "Failed to create file", Toast.LENGTH_SHORT).show();
-            }
-        } catch (IOException e) {
-            Log.e("MainActivity", "Error writing to file", e);
-            Toast.makeText(this, "Error saving file", Toast.LENGTH_SHORT).show();
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (requestCode == REQUEST_CODE_FOLDER && resultCode == RESULT_OK) {
+//            Uri uri = null;
+//            if (data!= null) {
+//                uri = data.getData();
+//            }
+//            saveCsvFile(uri);
+//        }
+//    }
+//
+//    private void saveCsvFile(Uri uri) {
+//        try {
+//            ContentResolver contentResolver = getContentResolver();
+//            DocumentFile directory = DocumentFile.fromTreeUri(this, uri);
+//
+//            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+//            String currentDateandTime = sdf.format(new Date());
+//            String fileName = "report_" + currentDateandTime + ".csv";
+//
+//            // Tạo file mới trong thư mục được chọn
+//            DocumentFile csvFile = directory.createFile("text/csv", fileName);
+//
+//            if (csvFile!= null && csvFile.exists()) {
+//                OutputStream outputStream = contentResolver.openOutputStream(csvFile.getUri());
+//                Writer writer = new BufferedWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
+//
+//                // Thêm BOM vào đầu file
+//                writer.write("\ufeff");
+//
+//                // Header
+//                writer.write("STT,Tháng,Mã lớp,Tên lớp,Chương trình đào tạo,Học phí,Số lượng học viên,Doanh thu");
+//                writer.write(System.lineSeparator()); // Sử dụng System.lineSeparator() để thêm một dòng mới
+//
+//                // Write data from listRevenue
+//                for (int i = 0; i < listRevenue.size(); i++) {
+//                    RevenueReportByYear report = listRevenue.get(i);
+//                    writer.write(String.format("%d,%d,%s,%s,%s,%d,%d,%d",
+//                            i+1,
+//                            report.getMonth(),
+//                            report.getIdClass(),
+//                            report.getNameClass(),
+//                            report.getNameProgram(),
+//                            report.getTuition(),
+//                            report.getNumberOfStudents(),
+//                            report.getRevenue()));
+//                    writer.write(System.lineSeparator()); // Sử dụng System.lineSeparator() để thêm một dòng mới
+//                }
+//
+//                writer.close();
+//                Toast.makeText(this, "File saved successfully", Toast.LENGTH_SHORT).show();
+//            } else {
+//                Toast.makeText(this, "Failed to create file", Toast.LENGTH_SHORT).show();
+//            }
+//        } catch (IOException e) {
+//            Log.e("MainActivity", "Error writing to file", e);
+//            Toast.makeText(this, "Error saving file", Toast.LENGTH_SHORT).show();
+//        }
+//    }
 
 
 
