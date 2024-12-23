@@ -24,7 +24,7 @@
                 android:layout_width="55dp"
                 android:layout_height="24dp"
                 android:textStyle="bold"
-                android:textSize="15dp"
+                android:textSize="15sp"
                 android:gravity="center"
                 android:text="Tháng: "/>
 
@@ -50,7 +50,7 @@
                 android:layout_width="45dp"
                 android:layout_height="24dp"
                 android:textStyle="bold"
-                android:textSize="15dp"
+                android:textSize="15sp"
                 android:text="Năm: "/>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -65,7 +65,7 @@
                     android:padding="0dp"
                     android:layout_width="110dp"
                     android:layout_height="wrap_content"
-                    android:textSize="15dp"
+                    android:textSize="15sp"
                     android:inputType="none"/>
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
@@ -89,48 +89,18 @@
                 android:gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="24dp"
-                android:textSize="15dp"
-                android:text="Oke nhies Loan"/>
+                android:textSize="15sp"
+                android:text="10 Jack"/>
 
             <TextView
                 android:gravity="center"
                 android:layout_width="45dp"
                 android:layout_height="24dp"
-                android:textSize="15dp"
+                android:textSize="15sp"
                 android:text=" đồng"/>
         </LinearLayout>
 
-     <!--   <LinearLayout
-            android:gravity="end"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="5dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
-            <TextView
-                android:layout_width="45dp"
-                android:layout_height="24dp"
-                android:gravity="center"
-                android:text="Tổng: "
-                android:textSize="20dp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@id/totalMoney"
-                android:gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="24dp"
-                android:textSize="20dp"
-                android:text="Oke nhies Loan"/>
-
-            <TextView
-                android:gravity="center"
-                android:layout_width="45dp"
-                android:layout_height="24dp"
-                android:textSize="20dp"
-                android:text=" đồng"/>
-        </LinearLayout>
--->
         <ListView
             android:id="@+id/notification_listview"
             android:layout_width="match_parent"
@@ -144,13 +114,14 @@
 
     <ImageButton
         android:id="@+id/return_to_frag_btn"
-        android:layout_width="wrap_content"
+        android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_gravity="center"
-        android:background="@drawable/rounded_btn"
-        android:layout_marginBottom="5dp"
-        android:layout_marginEnd="5dp"
+        android:background="@drawable/btn_small"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="10dp"
         android:contentDescription="Cài đặt"
+        android:drawableTint="@android:color/black"
         android:src="@drawable/baseline_arrow_back_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -27,7 +28,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Fragment_Setting extends Fragment {
-    private ImageButton settingBtn, logoutBtn;
+    private Button settingBtn, logoutBtn;
     private View view;
     private Activity context;
     TextView genderText;
