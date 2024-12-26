@@ -81,12 +81,15 @@ public class Fragment_Information extends Fragment implements AdapterView.OnItem
         String selectedText = selectedData.getName();
         Intent intent;
         if (selectedText == "Thông báo hệ thống" || selectedText == "Tra cứu điểm"
-                || selectedText == "Tra cứu chương trình đào tạo" || selectedText == "Lịch học"
+                || selectedText == "Tra cứu chương trình đào tạo"
                 || selectedText == "Xem các lớp học" || selectedText == "Xem chứng chỉ"
                 || selectedText == "Lịch sử thu") {
             intent = new Intent(getContext(), Activity_Notifications.class);
             intent.putExtra("message", selectedText);
-        } else if (selectedText == "Quản lý thông tin phòng học")
+        } else if(selectedText == "Lịch học"){
+            intent = new Intent(getContext(), Activity_Schedule.class);
+        }
+        else if (selectedText == "Quản lý thông tin phòng học")
             intent = new Intent(getContext(), Activity_List_Room.class);
         else {
             if (selectedText == "Quản lý doanh thu")

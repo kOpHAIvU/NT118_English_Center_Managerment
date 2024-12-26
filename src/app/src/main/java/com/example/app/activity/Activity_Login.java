@@ -63,60 +63,48 @@ public class Activity_Login extends AppCompatActivity {
         loginBtn = findViewById(R.id.login_btn);
         fogotPassBtn = findViewById(R.id.fogotPassBtn);
 
-        fogotPassBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(Activity_Login.this, Activity_Forgot_Password.class));
-            }
-        });
+        fogotPassBtn.setOnClickListener(v -> startActivity(new Intent(Activity_Login.this, Activity_Forgot_Password.class)));
 
         // Initialize database
 
         DataProvider.getInstance(Activity_Login.this).recreateDatabase(Activity_Login.this);
 
-        loginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        loginBtn.setOnClickListener(view -> {
+            // handle login event
+            username = usernameInput.getText().toString();
+            password = passwordInput.getText().toString();
+            if (username.isEmpty() || password.isEmpty()) {
+                Toast.makeText(Activity_Login.this, "Hãy nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
+            } else {
+                String whereClause = "USERNAME = ? AND PASSWORD = ?";
+                String[] whereArgs = new String[]{username, password};
+                Cursor cursor = AccountDAO.getInstance(Activity_Login.this).selectAccount(Activity_Login.this, whereClause, whereArgs);
 
-                // handle login event
-                username = usernameInput.getText().toString();
-                password = passwordInput.getText().toString();
-                if (username.isEmpty() || password.isEmpty()) {
-                    Toast.makeText(Activity_Login.this, "Hãy nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
+                if (cursor != null && cursor.getCount() > 0) {
+                    Intent intent = new Intent(Activity_Login.this, Activity_Main_Screen.class);
+                    startActivity(intent);
                 } else {
-
-                    String whereClause = "USERNAME = ? AND PASSWORD = ?";
-                    String[] whereArgs = new String[]{username, password};
-                    Cursor cursor = AccountDAO.getInstance(Activity_Login.this).selectAccount(Activity_Login.this, whereClause, whereArgs);
-
-                    if (cursor != null && cursor.getCount() > 0) {
-                        Intent intent = new Intent(Activity_Login.this, Activity_Main_Screen.class);
-                        startActivity(intent);
-                    } else {
-                        Toast.makeText(Activity_Login.this, "Hãy nhập đúng " +
-                                "tên đăng nhập và mật khẩu!", Toast.LENGTH_SHORT).show();
-                    }
-
-                    if (cursor.moveToFirst()) {
-                        do {
-                            int idIndex = cursor.getColumnIndex("ID_USER");
-                            if (idIndex != -1) {
-                                idUser = cursor.getString(idIndex);
-                            }
-                            int idAccIndex = cursor.getColumnIndex("ID_ACCOUNT");
-                            if (idAccIndex != -1) {
-                                idAccount = cursor.getString(idAccIndex);
-                            }
-
-                        } while (cursor.moveToNext());
-                    }
-
-                    cursor.close();
+                    Toast.makeText(Activity_Login.this, "Hãy nhập đúng " +
+                            "tên đăng nhập và mật khẩu!", Toast.LENGTH_SHORT).show();
                 }
 
+                if (cursor.moveToFirst()) {
+                    do {
+                        int idIndex = cursor.getColumnIndex("ID_USER");
+                        if (idIndex != -1) {
+                            idUser = cursor.getString(idIndex);
+                        }
+                        int idAccIndex = cursor.getColumnIndex("ID_ACCOUNT");
+                        if (idAccIndex != -1) {
+                            idAccount = cursor.getString(idAccIndex);
+                        }
+
+                    } while (cursor.moveToNext());
+                }
+
+                cursor.close();
             }
         });
-
     }
 
     @Override
@@ -124,49 +112,42 @@ public class Activity_Login extends AppCompatActivity {
         super.onStart();
         DataProvider.getInstance(Activity_Login.this).recreateDatabase(Activity_Login.this);
 
-        loginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        loginBtn.setOnClickListener(view -> {
+            // handle login event
+            username = usernameInput.getText().toString();
+            password = passwordInput.getText().toString();
+            if (username.isEmpty() || password.isEmpty()) {
+                Toast.makeText(Activity_Login.this, "Hãy nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
+            } else {
 
-                // handle login event
-                username = usernameInput.getText().toString();
-                password = passwordInput.getText().toString();
-                if (username.isEmpty() || password.isEmpty()) {
-                    Toast.makeText(Activity_Login.this, "Hãy nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
+                String whereClause = "USERNAME = ? AND PASSWORD = ?";
+                String[] whereArgs = new String[]{username, password};
+                Cursor cursor = AccountDAO.getInstance(Activity_Login.this).selectAccount(Activity_Login.this, whereClause, whereArgs);
+
+                if (cursor != null && cursor.getCount() > 0) {
+                    Intent intent = new Intent(Activity_Login.this, Activity_Main_Screen.class);
+                    startActivity(intent);
                 } else {
-
-                    String whereClause = "USERNAME = ? AND PASSWORD = ?";
-                    String[] whereArgs = new String[]{username, password};
-                    Cursor cursor = AccountDAO.getInstance(Activity_Login.this).selectAccount(Activity_Login.this, whereClause, whereArgs);
-
-                    if (cursor != null && cursor.getCount() > 0) {
-                        Intent intent = new Intent(Activity_Login.this, Activity_Main_Screen.class);
-                        startActivity(intent);
-                    } else {
-                        Toast.makeText(Activity_Login.this, "Hãy nhập đúng tên đăng " +
-                                "nhập và mật khẩu!", Toast.LENGTH_SHORT).show();
-                    }
-
-                    if (cursor.moveToFirst()) {
-                        do {
-                            int idIndex = cursor.getColumnIndex("ID_USER");
-                            if (idIndex != -1) {
-                                idUser = cursor.getString(idIndex);
-                            }
-                            int idAccIndex = cursor.getColumnIndex("ID_ACCOUNT");
-                            if (idAccIndex != -1) {
-                                idAccount = cursor.getString(idAccIndex);
-                            }
-
-                        } while (cursor.moveToNext());
-                    }
-
-                    cursor.close();
+                    Toast.makeText(Activity_Login.this, "Hãy nhập đúng tên đăng " +
+                            "nhập và mật khẩu!", Toast.LENGTH_SHORT).show();
                 }
 
+                if (cursor.moveToFirst()) {
+                    do {
+                        int idIndex = cursor.getColumnIndex("ID_USER");
+                        if (idIndex != -1) {
+                            idUser = cursor.getString(idIndex);
+                        }
+                        int idAccIndex = cursor.getColumnIndex("ID_ACCOUNT");
+                        if (idAccIndex != -1) {
+                            idAccount = cursor.getString(idAccIndex);
+                        }
+
+                    } while (cursor.moveToNext());
+                }
+                cursor.close();
             }
         });
-
         insertData();
     }
 
@@ -288,6 +269,10 @@ public class Activity_Login extends AppCompatActivity {
 
         ScheduleDTO schedule1 = new ScheduleDTO(null, "2", "9", "11",
                 "CLS1", "CLA1");
+        ScheduleDTO schedule11 = new ScheduleDTO(null, "4", "9", "11",
+                "CLS1", "CLA1");
+        ScheduleDTO schedule12 = new ScheduleDTO(null, "5", "9", "11",
+                "CLS1", "CLA1");
         ScheduleDTO schedule2= new ScheduleDTO(null, "3", "7", "9",
                 "CLS1", "CLA2");
         ScheduleDTO schedule3= new ScheduleDTO(null, "4", "13", "15",
@@ -324,6 +309,10 @@ public class Activity_Login extends AppCompatActivity {
                 schedule3);
         ScheduleDAO.getInstance(Activity_Login.this).InsertSchedule(Activity_Login.this,
                 schedule1);
+        ScheduleDAO.getInstance(Activity_Login.this).InsertSchedule(Activity_Login.this,
+                schedule11);
+        ScheduleDAO.getInstance(Activity_Login.this).InsertSchedule(Activity_Login.this,
+                schedule12);
         ScheduleDAO.getInstance(Activity_Login.this).InsertSchedule(Activity_Login.this,
                 schedule2);
 
@@ -496,11 +485,13 @@ public class Activity_Login extends AppCompatActivity {
 
         // Insert data ACCOUNT
 
+        AccountDTO account11 = new AccountDTO(null, "STU3", "nguyenthiz", "thiz123");
         AccountDTO account1 = new AccountDTO(null, "STU1", "nguyenthia", "thia123");
         AccountDTO account2 = new AccountDTO(null, "STA1", "nguyenthic", "thic123");
         AccountDTO account5 = new AccountDTO(null, "STA2", "nguyenthid", "thid123");
         AccountDTO account7 = new AccountDTO(null, "STA3", "nguyenthie", "thie123");
         AccountDAO.getInstance(Activity_Login.this).insertAccount(Activity_Login.this, account1);
+        AccountDAO.getInstance(Activity_Login.this).insertAccount(Activity_Login.this, account11);
         AccountDAO.getInstance(Activity_Login.this).insertAccount(Activity_Login.this, account2);
         AccountDAO.getInstance(Activity_Login.this).insertAccount(Activity_Login.this, account5);
         AccountDAO.getInstance(Activity_Login.this).insertAccount(Activity_Login.this, account7);

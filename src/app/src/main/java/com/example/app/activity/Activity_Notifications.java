@@ -53,18 +53,13 @@ public class Activity_Notifications extends AppCompatActivity {
         listView = findViewById(R.id.notification_listview);
         returnBtn = findViewById(R.id.return_to_frag_btn);
 
-        returnBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        returnBtn.setOnClickListener(v -> finish());
         dataArrayList = new ArrayList<>();
 
         String whereClause = "STATUS = ?";
         String[] whereArgs = new String[] {"0"};
 
-        int type = -1;
+        int type=-1;
 
         switch (message) {
             //Học viên
@@ -78,11 +73,9 @@ public class Activity_Notifications extends AppCompatActivity {
                 }
                /// dataArrayList.add(new NotificationDTO("1","1","1","1"));
                 listAdapter = new List_Adapter(Activity_Notifications.this, R.layout.list_notification_item, dataArrayList);
-
                 break;
 
             case "Tra cứu điểm":
-
                 type = AccountDAO.getInstance(Activity_Notifications.this).GetObjectLogin(Activity_Notifications.this,
                         Activity_Login.username, Activity_Login.password);
                 List<ExamScoreDTO> listExamScore = ExamScoreDAO.getInstance(Activity_Notifications.this).SelectExamScoreById(
@@ -114,8 +107,7 @@ public class Activity_Notifications extends AppCompatActivity {
             case "Lịch học":
                 type = AccountDAO.getInstance(Activity_Notifications.this).GetObjectLogin(Activity_Notifications.this,
                         Activity_Login.username, Activity_Login.password);
-                List<ScheduleDTO> listSchedule = ScheduleDAO.getInstance(
-                        Activity_Notifications.this).SelectScheduleByIdStudent(Activity_Notifications.this,
+                List<ScheduleDTO> listSchedule = ScheduleDAO.getInstance(Activity_Notifications.this).SelectScheduleByIdStudent(Activity_Notifications.this,
                         Activity_Login.idUser, type);
                 for (int i = 0; i < listSchedule.size(); i++) {
                     dataArrayList.add(listSchedule.get(i));
@@ -126,15 +118,12 @@ public class Activity_Notifications extends AppCompatActivity {
                 break;
 
             case "Quản lý thông tin phòng học":
-
                // dataArrayList.add(new ClassroomDTO("1", "1"));
-
                 List<ClassroomDTO> listClassroom = ClassroomDAO.getInstance(Activity_Notifications.this).SelectClassroom(
                         Activity_Notifications.this, "STATUS = ?", new String[] {"0"});
                 for (int i = 0; i < listClassroom.size(); i++) {
                     dataArrayList.add(listClassroom.get(i));
                 }
-
                 listAdapter = new List_Adapter(Activity_Notifications.this, R.layout.list_classroom_item, dataArrayList);
                 break;
 
@@ -166,7 +155,6 @@ public class Activity_Notifications extends AppCompatActivity {
 
             case "Xem chứng chỉ":
                 // dataArrayList.add(new CertificateDTO("1", "1", "1"));
-
                 List<CertificateDTO> listCertificate = CertificateDAO.getInstance(
                         Activity_Notifications.this).SelectCertificate(Activity_Notifications.this,
                         "STATUS = ?", new String[] {"0"});
