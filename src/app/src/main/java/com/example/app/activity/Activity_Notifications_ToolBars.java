@@ -203,6 +203,7 @@ public class Activity_Notifications_ToolBars extends AppCompatActivity {
 
         if (id == R.id.search) {
             SearchView searchView = (SearchView) item.getActionView();
+            assert searchView != null;
             searchView.setQueryHint("Search here");
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override

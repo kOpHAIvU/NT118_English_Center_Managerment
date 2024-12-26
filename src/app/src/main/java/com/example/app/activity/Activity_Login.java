@@ -2,7 +2,9 @@ package com.example.app.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
@@ -52,7 +54,7 @@ public class Activity_Login extends AppCompatActivity {
     public static String password;
     public static String username;
     public static String idAccount;
-    public static int inserted = 0;
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,14 +116,12 @@ public class Activity_Login extends AppCompatActivity {
         DataProvider.getInstance(Activity_Login.this).recreateDatabase(Activity_Login.this);
 
         loginBtn.setOnClickListener(view -> {
-
             // handle login event
             username = usernameInput.getText().toString();
             password = passwordInput.getText().toString();
             if (username.isEmpty() || password.isEmpty()) {
                 Toast.makeText(Activity_Login.this, "Hãy nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
             } else {
-
                 String whereClause = "USERNAME = ? AND PASSWORD = ?";
                 String[] whereArgs = new String[]{username, password};
                 Cursor cursor = AccountDAO.getInstance(Activity_Login.this).selectAccount(Activity_Login.this, whereClause, whereArgs);
@@ -150,13 +150,14 @@ public class Activity_Login extends AppCompatActivity {
                 cursor.close();
             }
         });
+        sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
 
         insertData();
     }
 
     private void insertData() {
-        if(inserted != 0) return;
-        inserted = 1;
+        boolean insertedData = sharedPreferences.getBoolean("insertedData", false);
+        if(insertedData) return;
         // Official Student
         OfficialStudentDTO student1 = new OfficialStudentDTO(null, "Nguyen Van A", "Binh Dinh", "0312345678", "Nam", "22/2/2022", 0);
         OfficialStudentDTO student2 = new OfficialStudentDTO(null, "Le Thi B", "Binh Duong","0332323222", "Nữ", "22/2/2022", 0 );
@@ -458,5 +459,6 @@ public class Activity_Login extends AppCompatActivity {
         NotificationDAO.getInstance(Activity_Login.this).InsertNotification(Activity_Login.this, notification3);
         NotificationDTO notification4 =  new NotificationDTO(null, "ACC2", "Thông báo học bù", "Lớp CLS3 ọc bù từ ngày 13/4/2024 đến hết ngày 16/4/2024");
         NotificationDAO.getInstance(Activity_Login.this).InsertNotification(Activity_Login.this, notification4);
+        sharedPreferences.edit().putBoolean("insertedData", true).apply();
     }
 }
