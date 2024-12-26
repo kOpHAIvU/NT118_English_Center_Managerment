@@ -5,8 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="027f4709-7eef-4651-826a-17232e25ec56" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/material_theme_project_new.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/material_theme_project_new.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/.idea/misc.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,7 +34,7 @@
   <component name="GithubPullRequestsUISettings"><![CDATA[{
   "selectedUrlAndAccountId": {
     "url": "https://github.com/kOpHAIvU/NT118_English_Center_Managerment.git",
-    "accountId": "7073f6f9-f9eb-46db-9aa9-489501cd3bc1"
+    "accountId": "aace4c6f-89be-4073-9003-273fc1063aab"
   }
 }]]></component>
   <component name="ProjectColorInfo">{
@@ -53,9 +54,9 @@
     "cidr.known.project.marker": "true",
     "com.google.services.firebase.aqiPopupShown": "true",
     "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "trang",
+    "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/UIT/Year3/semester1/LapTrinhDiDong/ThucHanh/Lab05/Lab5_1",
+    "last_opened_file_path": "D:/Sukem/Nam3/NT118_Phat trien UD Web/Project/NT118_English_Center_Managerment/src",
     "show.migrate.to.gradle.popup": "false"
   }
 }]]></component>

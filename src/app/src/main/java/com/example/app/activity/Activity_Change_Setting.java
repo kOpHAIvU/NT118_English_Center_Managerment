@@ -238,6 +238,7 @@ public class Activity_Change_Setting extends AppCompatActivity {
                             String phoneNumberUpdate = phoneInp.getText().toString();
                             String addressUpdate = addrInp.getText().toString();
                             String birthdayUpdate = birthdayInp.getText().toString();
+                            String name = nameInp.getText().toString();
 
                             // Update password
 
@@ -259,7 +260,7 @@ public class Activity_Change_Setting extends AppCompatActivity {
 
                             if (flag == 1) {
                                 OfficialStudentDTO student = new OfficialStudentDTO(idUser,
-                                        fullName, addressUpdate, phoneNumberUpdate, genderUpdate, birthdayUpdate, 0);
+                                        name, addressUpdate, phoneNumberUpdate, genderUpdate, birthdayUpdate, 0);
                                 String whereClauseUpdateInf = "ID_STUDENT = ?";
                                 String[] whereArgUpdateInf =  new String[]{Activity_Login.idUser};
 
@@ -269,7 +270,7 @@ public class Activity_Change_Setting extends AppCompatActivity {
                                     isUpdate = true;
                                 }
                             } else {
-                                StaffDTO staff = new StaffDTO(idUser, fullName, addressUpdate, phoneNumberUpdate,
+                                StaffDTO staff = new StaffDTO(idUser, name, addressUpdate, phoneNumberUpdate,
                                         genderUpdate, birthdayUpdate, salary,  String.valueOf(type), 0);
                                 String whereClauseUpdateInf = "ID_STAFF = ?";
                                 String[] whereArgUpdateInf =  new String[]{Activity_Login.idUser};
