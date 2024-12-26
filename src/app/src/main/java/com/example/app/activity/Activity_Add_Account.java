@@ -96,11 +96,7 @@ public class Activity_Add_Account extends AppCompatActivity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(Activity_Add_Account.this);
                 builder.setTitle("Xác nhận")
                         .setMessage("Bạn chưa hoàn thành chỉnh sửa, bạn có chắc chắn muốn thoát?");
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                    }
-                });
+                builder.setPositiveButton("OK", (dialog, which) -> finish());
                 builder.setNegativeButton("Hủy", null);
                 builder.show();
             });

@@ -54,12 +54,7 @@ public class Activity_Notifications_ToolBars extends AppCompatActivity {
         dataArrayList = new ArrayList<>();
         list = new ArrayList<>();
 
-        returnBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        returnBtn.setOnClickListener(v -> finish());
     }
 
     @Override

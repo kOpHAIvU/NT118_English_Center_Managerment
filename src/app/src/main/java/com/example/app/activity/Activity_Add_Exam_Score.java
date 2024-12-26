@@ -62,154 +62,135 @@ public class Activity_Add_Exam_Score extends AppCompatActivity {
            listen.setText(listExamScore.get(0).getListening());
            read.setText(listExamScore.get(0).getReading());
 
-           exitBtn.setOnClickListener(new View.OnClickListener() {
-               @Override
-               public void onClick(View v) {
+           exitBtn.setOnClickListener(v -> {
 
-                   AlertDialog.Builder builder = new AlertDialog.Builder(Activity_Add_Exam_Score.this);
-                   builder.setTitle("Xác nhận")
-                           .setMessage("Bạn có chắc chắn muốn thoát?");
-                   builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                       public void onClick(DialogInterface dialog, int which) {
-                           finish();
-                       }
-                   });
-                   builder.setNegativeButton("Hủy", null);
-                   builder.show();
-               }
+               AlertDialog.Builder builder = new AlertDialog.Builder(Activity_Add_Exam_Score.this);
+               builder.setTitle("Xác nhận")
+                       .setMessage("Bạn có chắc chắn muốn thoát?");
+               builder.setPositiveButton("OK", (dialog, which) -> finish());
+               builder.setNegativeButton("Hủy", null);
+               builder.show();
            });
-           doneBtn.setOnClickListener(new View.OnClickListener() {
-               @Override
-               public void onClick(View v) {
-                   if (speak.getText().toString().equals("") || write.getText().toString().equals("")
-                           || listen.getText().toString().equals("") || read.getText().toString().equals("")) {
-                       Toast.makeText(Activity_Add_Exam_Score.this, "Hãy nhập đầy đủ tất cả thông tin", Toast.LENGTH_SHORT).show();
-                   } else {
+           doneBtn.setOnClickListener(v -> {
+               if (speak.getText().toString().equals("") || write.getText().toString().equals("")
+                       || listen.getText().toString().equals("") || read.getText().toString().equals("")) {
+                   Toast.makeText(Activity_Add_Exam_Score.this, "Hãy nhập đầy đủ tất cả thông tin", Toast.LENGTH_SHORT).show();
+               } else {
 
-                        if (!isValidFloat(speak.getText().toString()) ||
-                        !isValidFloat(write.getText().toString()) ||
-                        !isValidFloat(listen.getText().toString()) ||
-                        !isValidFloat(read.getText().toString())) {
-                            Toast.makeText(Activity_Add_Exam_Score.this,
-                                    "Hãy nhập đúng định dạng của điểm!",
-                                    Toast.LENGTH_SHORT).show();
-                        } else {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(Activity_Add_Exam_Score.this);
-                            builder.setTitle("Xác nhận")
-                                    .setMessage("Bạn có chắc chắn muốn thêm thông báo không?");
-                            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
+                    if (!isValidFloat(speak.getText().toString()) ||
+                    !isValidFloat(write.getText().toString()) ||
+                    !isValidFloat(listen.getText().toString()) ||
+                    !isValidFloat(read.getText().toString())) {
+                        Toast.makeText(Activity_Add_Exam_Score.this,
+                                "Hãy nhập đúng định dạng của điểm!",
+                                Toast.LENGTH_SHORT).show();
+                    } else {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(Activity_Add_Exam_Score.this);
+                        builder.setTitle("Xác nhận")
+                                .setMessage("Bạn có chắc chắn muốn thêm thông báo không?");
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
 
-                                    ExamScoreDTO examScore = new ExamScoreDTO(null, null,null,
-                                            speak.getText().toString(), write.getText().toString(),
-                                            listen.getText().toString(), read.getText().toString());
-                                    try {
-                                        int rowEffect = ExamScoreDAO.getInstance(Activity_Add_Exam_Score.this)
-                                                .UpdateExamScore(Activity_Add_Exam_Score.this,
-                                                        examScore, "ID_EXAM_SCORE = ? AND STATUS = ?",
-                                                        new String[] {message, "0"});
-                                        if (rowEffect > 0) {
-                                            Toast.makeText(Activity_Add_Exam_Score.this,
-                                                    "Sửa điểm học viên thành công", Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            Toast.makeText(Activity_Add_Exam_Score.this,
-                                                    "Sửa điểm học viên thất bại", Toast.LENGTH_SHORT).show();
-                                        }
-                                    } catch (Exception e) {
-                                        Log.d("Update exam score of student", "failed");
+                                ExamScoreDTO examScore = new ExamScoreDTO(null, null,null,
+                                        speak.getText().toString(), write.getText().toString(),
+                                        listen.getText().toString(), read.getText().toString());
+                                try {
+                                    int rowEffect = ExamScoreDAO.getInstance(Activity_Add_Exam_Score.this)
+                                            .UpdateExamScore(Activity_Add_Exam_Score.this,
+                                                    examScore, "ID_EXAM_SCORE = ? AND STATUS = ?",
+                                                    new String[] {message, "0"});
+                                    if (rowEffect > 0) {
+                                        Toast.makeText(Activity_Add_Exam_Score.this,
+                                                "Sửa điểm học viên thành công", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(Activity_Add_Exam_Score.this,
+                                                "Sửa điểm học viên thất bại", Toast.LENGTH_SHORT).show();
                                     }
-
+                                } catch (Exception e) {
+                                    Log.d("Update exam score of student", "failed");
                                 }
-                            });
-                            builder.setNegativeButton("Hủy", null);
-                            builder.show();
-                        }
-                   }
+                            }
+                        });
+                        builder.setNegativeButton("Hủy", null);
+                        builder.show();
+                    }
                }
            });
        } else {
-           exitBtn.setOnClickListener(new View.OnClickListener() {
-               @Override
-               public void onClick(View v) {
+           exitBtn.setOnClickListener(v -> {
 
-                   AlertDialog.Builder builder = new AlertDialog.Builder(Activity_Add_Exam_Score.this);
-                   builder.setTitle("Xác nhận")
-                           .setMessage("Bạn có chắc chắn muốn thoát?");
-                   builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                       public void onClick(DialogInterface dialog, int which) {
-                           finish();
-                       }
-                   });
-                   builder.setNegativeButton("Hủy", null);
-                   builder.show();
-               }
+               AlertDialog.Builder builder = new AlertDialog.Builder(Activity_Add_Exam_Score.this);
+               builder.setTitle("Xác nhận")
+                       .setMessage("Bạn có chắc chắn muốn thoát?");
+               builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                   public void onClick(DialogInterface dialog, int which) {
+                       finish();
+                   }
+               });
+               builder.setNegativeButton("Hủy", null);
+               builder.show();
            });
 
-           doneBtn.setOnClickListener(new View.OnClickListener() {
-               @Override
-               public void onClick(View v) {
+           doneBtn.setOnClickListener(v -> {
 
-                   if (nameStudents.getText().toString().equals("")
-                           || speak.getText().toString().equals("")
-                   || write.getText().toString().equals("")
-                           || read.getText().toString().equals("")) {
+               if (nameStudents.getText().toString().equals("")
+                       || speak.getText().toString().equals("")
+               || write.getText().toString().equals("")
+                       || read.getText().toString().equals("")) {
+                   Toast.makeText(Activity_Add_Exam_Score.this,
+                           "Hãy nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
+               } else {
+                   String nameStudentText = nameStudents.getText().toString();
+                   List<OfficialStudentDTO> listStudent = OfficialStudentDAO.getInstance(Activity_Add_Exam_Score.this)
+                           .SelectStudentVer2(Activity_Add_Exam_Score.this,
+                                   "FULLNAME = ? AND STATUS = ?",
+                                   new String[] {nameStudentText, "0"});
+                   if (listStudent.size() == 0) {
                        Toast.makeText(Activity_Add_Exam_Score.this,
-                               "Hãy nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
-                   } else {
-                       String nameStudentText = nameStudents.getText().toString();
-                       List<OfficialStudentDTO> listStudent = OfficialStudentDAO.getInstance(Activity_Add_Exam_Score.this)
-                               .SelectStudentVer2(Activity_Add_Exam_Score.this,
-                                       "FULLNAME = ? AND STATUS = ?",
-                                       new String[] {nameStudentText, "0"});
-                       if (listStudent.size() == 0) {
-                           Toast.makeText(Activity_Add_Exam_Score.this,
-                                   "Học viên này không tồn tại trên hệ thống!",
-                                   Toast.LENGTH_SHORT).show();
-                       } else if (!isValidFloat(speak.getText().toString()) ||
-                               !isValidFloat(write.getText().toString()) ||
-                               !isValidFloat(listen.getText().toString()) ||
-                               !isValidFloat(read.getText().toString())) {
-                           Toast.makeText(Activity_Add_Exam_Score.this,
-                                   "Hãy nhập đúng định dạng của điểm!",
-                                   Toast.LENGTH_SHORT).show();
-                           return;
-                       }
+                               "Học viên này không tồn tại trên hệ thống!",
+                               Toast.LENGTH_SHORT).show();
+                   } else if (!isValidFloat(speak.getText().toString()) ||
+                           !isValidFloat(write.getText().toString()) ||
+                           !isValidFloat(listen.getText().toString()) ||
+                           !isValidFloat(read.getText().toString())) {
+                       Toast.makeText(Activity_Add_Exam_Score.this,
+                               "Hãy nhập đúng định dạng của điểm!",
+                               Toast.LENGTH_SHORT).show();
+                       return;
+                   }
 
-                       List<ExaminationDTO> listExam = ExaminationDAO.getInstance(Activity_Add_Exam_Score.this)
-                               .SelectExamination(Activity_Add_Exam_Score.this,
-                                       "ID_CLASS = ? AND STATUS = ?",
-                                       new String[] {List_Adapter.idClassClick, "0"});
-                       if (listExam.size() > 0 && listStudent.size() > 0) {
-                           List<ExamScoreDTO> listScore = ExamScoreDAO.getInstance(Activity_Add_Exam_Score.this)
-                                   .SelectExamScore(Activity_Add_Exam_Score.this,
-                                           "ID_EXAM = ? AND ID_STUDENT = ? AND STATUS = ?",
-                                           new String[] {listExam.get(0).getIdExam(),
-                                                   listStudent.get(0).getIdStudent() , "0"});
-                           if (listScore.size() > 0) {
-                               Toast.makeText(Activity_Add_Exam_Score.this, "Điểm của học viên " +
-                                       "này đã tồn tại trên hệ thống!", Toast.LENGTH_SHORT).show();
-                               return;
+                   List<ExaminationDTO> listExam = ExaminationDAO.getInstance(Activity_Add_Exam_Score.this)
+                           .SelectExamination(Activity_Add_Exam_Score.this,
+                                   "ID_CLASS = ? AND STATUS = ?",
+                                   new String[] {List_Adapter.idClassClick, "0"});
+                   if (listExam.size() > 0 && listStudent.size() > 0) {
+                       List<ExamScoreDTO> listScore = ExamScoreDAO.getInstance(Activity_Add_Exam_Score.this)
+                               .SelectExamScore(Activity_Add_Exam_Score.this,
+                                       "ID_EXAM = ? AND ID_STUDENT = ? AND STATUS = ?",
+                                       new String[] {listExam.get(0).getIdExam(),
+                                               listStudent.get(0).getIdStudent() , "0"});
+                       if (listScore.size() > 0) {
+                           Toast.makeText(Activity_Add_Exam_Score.this, "Điểm của học viên " +
+                                   "này đã tồn tại trên hệ thống!", Toast.LENGTH_SHORT).show();
+                           return;
+                       } else {
+                           ExamScoreDTO examStudent = new ExamScoreDTO(null, listExam.get(0).getIdExam(),
+                                   listStudent.get(0).getIdStudent(),
+                                   speak.getText().toString(), write.getText().toString(),
+                                   listen.getText().toString(), read.getText().toString());
+                           int rowEffect = ExamScoreDAO.getInstance(Activity_Add_Exam_Score.this)
+                                   .InsertExamScore(Activity_Add_Exam_Score.this, examStudent);
+                           if (rowEffect > 0)  {
+                               Toast.makeText(Activity_Add_Exam_Score.this,
+                                       "Thêm điểm cho học viên thành công!", Toast.LENGTH_SHORT).show();
                            } else {
-                               ExamScoreDTO examStudent = new ExamScoreDTO(null, listExam.get(0).getIdExam(),
-                                       listStudent.get(0).getIdStudent(),
-                                       speak.getText().toString(), write.getText().toString(),
-                                       listen.getText().toString(), read.getText().toString());
-                               int rowEffect = ExamScoreDAO.getInstance(Activity_Add_Exam_Score.this)
-                                       .InsertExamScore(Activity_Add_Exam_Score.this, examStudent);
-                               if (rowEffect > 0)  {
-                                   Toast.makeText(Activity_Add_Exam_Score.this,
-                                           "Thêm điểm cho học viên thành công!", Toast.LENGTH_SHORT).show();
-                               } else {
-                                   Toast.makeText(Activity_Add_Exam_Score.this,
-                                           "Thêm điểm cho học viên thất bại!", Toast.LENGTH_SHORT).show();
-                               }
+                               Toast.makeText(Activity_Add_Exam_Score.this,
+                                       "Thêm điểm cho học viên thất bại!", Toast.LENGTH_SHORT).show();
                            }
                        }
                    }
-
                }
            });
-
        }
     }
 
@@ -223,5 +204,4 @@ public class Activity_Add_Exam_Score extends AppCompatActivity {
             return false;
         }
     }
-
 }

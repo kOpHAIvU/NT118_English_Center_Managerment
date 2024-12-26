@@ -58,12 +58,7 @@ public class Activity_Notifications_ToolBars_Second_Layer extends AppCompatActiv
         dataArrayList = new ArrayList<>();
         list = new ArrayList<>();
 
-        returnBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        returnBtn.setOnClickListener(v -> finish());
 
         listView.setAdapter(listAdapter);
         setSupportActionBar(toolbar);

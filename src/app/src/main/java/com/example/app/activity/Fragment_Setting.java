@@ -163,31 +163,24 @@ public class Fragment_Setting extends Fragment {
         settingBtn = context.findViewById(R.id.setting_btn);
         logoutBtn = context.findViewById(R.id.logout_btn);
 
-        settingBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Tạo Intent để chuyển sang Activity Change_Setting
-                Intent intent = new Intent(getActivity(), Activity_Change_Setting.class);
-                startActivity(intent);
-            }
+        settingBtn.setOnClickListener(v -> {
+            // Tạo Intent để chuyển sang Activity Change_Setting
+            Intent intent = new Intent(getActivity(), Activity_Change_Setting.class);
+            startActivity(intent);
         });
-        logoutBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        logoutBtn.setOnClickListener(v -> {
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle("Thông báo")
-                        .setMessage("Bạn có chắc chắn muốn đăng xuất không ?");;
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(getActivity(), Activity_Login.class);
-                        startActivity(intent);
-                    }
-                });
-                builder.setNegativeButton("Hủy", null);
-                builder.show();
-
-            }
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle("Thông báo")
+                    .setMessage("Bạn có chắc chắn muốn đăng xuất không ?");;
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(getActivity(), Activity_Login.class);
+                    startActivity(intent);
+                }
+            });
+            builder.setNegativeButton("Hủy", null);
+            builder.show();
         });
     }
 }

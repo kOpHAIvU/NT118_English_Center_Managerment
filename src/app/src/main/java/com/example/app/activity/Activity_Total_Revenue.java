@@ -80,10 +80,7 @@ public class Activity_Total_Revenue extends AppCompatActivity {
         setContentView(R.layout.activity_total_revenue);
 
         returnFrag = findViewById(R.id.return_to_frag_btn);
-        returnFrag.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) { finish(); }
-        });
+        returnFrag.setOnClickListener(v -> finish());
 
         lineChart = findViewById(R.id.chart);
 
@@ -179,24 +176,14 @@ public class Activity_Total_Revenue extends AppCompatActivity {
         lineChart.invalidate();
 
         detailBtn = findViewById(R.id.detailBtn);
-        detailBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Activity_Total_Revenue.this, Activity_List_Revenue.class);
-                intent.putExtra("message", "Thống kê doanh thu");
-                startActivity(intent);
-            }
+        detailBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(Activity_Total_Revenue.this, Activity_List_Revenue.class);
+            intent.putExtra("message", "Thống kê doanh thu");
+            startActivity(intent);
         });
 
         printBtn = findViewById(R.id.printBtn);
-        printBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                showFolderSelectionDialog();
-
-            }
-        });
+        printBtn.setOnClickListener(v -> showFolderSelectionDialog());
     }
     private void showFolderSelectionDialog() {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
