@@ -32,7 +32,7 @@ public class ScheduleDAO {
         ContentValues values = new ContentValues();
         int maxId = DataProvider.getInstance(context).getMaxId("SCHEDULE", "ID_SCHEDULE");
 
-        values.put("ID_SCHEDULE", "SCH" + String.valueOf(maxId + 1));
+        values.put("ID_SCHEDULE", "SCH" + (maxId + 1));
         values.put("DAY_OF_WEEK", schedule.getDayOfWeek());
         values.put("START_TIME",schedule.getStartTime());
         values.put("END_TIME", schedule.getEndTime());

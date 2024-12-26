@@ -1,5 +1,7 @@
 package com.example.app.model;
 
+import androidx.annotation.NonNull;
+
 public class ScheduleDTO {
     String idSchedule, dayOfWeek, startTime, endTime, idClass, idClassroom;
     public ScheduleDTO(String idSchedule, String dayOfWeek, String startTime,
@@ -17,15 +19,12 @@ public class ScheduleDTO {
     public String getDayOfWeek() {
         return dayOfWeek;
     }
-
     public String getStartTime() {
         return startTime;
     }
-
     public String getEndTime() {
         return endTime;
     }
-
     public String getIdClass() {
         return idClass;
     }
@@ -36,19 +35,15 @@ public class ScheduleDTO {
     public void setIdSchedule(String idSchedule) {
         this.idSchedule = idSchedule;
     }
-
     public void setDayOfWeek(String dayOfWeek) {
         this.dayOfWeek = dayOfWeek;
     }
-
     public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
-
     public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
-
     public void setIdClass(String idClass) {
         this.idClass = idClass;
     }
@@ -56,6 +51,7 @@ public class ScheduleDTO {
         this.idClassroom = idClassroom;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "ScheduleDTO{" +
