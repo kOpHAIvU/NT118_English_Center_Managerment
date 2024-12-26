@@ -34,7 +34,7 @@ public class Activity_Add_Account extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_account);
        // idAccount = findViewById(R.id.idAccount);
-        idUser = findViewById(R.id.idUser);
+        //idUser = findViewById(R.id.idUser);
         username = findViewById(R.id.username);
         password = findViewById(R.id.password);
         exitBtn = findViewById(R.id.exit_btn);
@@ -44,7 +44,6 @@ public class Activity_Add_Account extends AppCompatActivity {
 
 
         if (!message.equals("")) {
-
             Log.d("Put message: ", message);
             idUser.setEnabled(false);
 
@@ -60,147 +59,128 @@ public class Activity_Add_Account extends AppCompatActivity {
                 Log.d("Account ID: ", message);
             }
 
-            doneBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (idUser.getText().toString().equals("")
-                            || username.getText().toString().equals("") || password.getText().toString().equals("")) {
-                        Toast.makeText(Activity_Add_Account.this, "All fields are mandatory", Toast.LENGTH_SHORT).show();
-                    } else {
-
-                        AlertDialog.Builder builder = new AlertDialog.Builder(Activity_Add_Account.this);
-                        builder.setTitle("Thông báo")
-                                .setMessage("Bạn có chắn chắn muốn chỉnh sửa thông tin tài khoản không?");
-                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        AccountDTO accountUpdate = new AccountDTO(message, idUser.getText().toString(),
-                                                username.getText().toString(), password.getText().toString());
-                                        try {
-                                            int rowEffect = AccountDAO.getInstance(Activity_Add_Account.this).updateAccount(Activity_Add_Account.this,
-                                                    accountUpdate, "ID_ACCOUNT = ?", new String[] {message});
-                                            if (rowEffect > 0) {
-                                                Toast.makeText(Activity_Add_Account.this, "Sửa thông tin tài " +
-                                                        "khoản thành công!", Toast.LENGTH_SHORT).show();
-                                            } else {
-                                                Log.d("Update account: ", "failed");
-                                            }
-                                        } catch (Exception e) {
-                                            Log.d("Update account error: ", e.getMessage());
-                                        }
-                                    }
-                                });
-                        builder.setNegativeButton("Hủy", null);
-                        builder.show();
-
-                    }
-                }
-            });
-
-            exitBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            doneBtn.setOnClickListener(v -> {
+                if (idUser.getText().toString().equals("")
+                        || username.getText().toString().equals("") || password.getText().toString().equals("")) {
+                    Toast.makeText(Activity_Add_Account.this, "All fields are mandatory", Toast.LENGTH_SHORT).show();
+                } else {
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(Activity_Add_Account.this);
-                    builder.setTitle("Xác nhận")
-                            .setMessage("Bạn chưa hoàn thành chỉnh sửa, bạn có chắc chắn muốn thoát?");
+                    builder.setTitle("Thông báo")
+                            .setMessage("Bạn có chắn chắn muốn chỉnh sửa thông tin tài khoản không?");
                     builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            finish();
-                        }
-                    });
+                                public void onClick(DialogInterface dialog, int which) {
+                                    AccountDTO accountUpdate = new AccountDTO(message, idUser.getText().toString(),
+                                            username.getText().toString(), password.getText().toString());
+                                    try {
+                                        int rowEffect = AccountDAO.getInstance(Activity_Add_Account.this).updateAccount(Activity_Add_Account.this,
+                                                accountUpdate, "ID_ACCOUNT = ?", new String[] {message});
+                                        if (rowEffect > 0) {
+                                            Toast.makeText(Activity_Add_Account.this, "Sửa thông tin tài " +
+                                                    "khoản thành công!", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Log.d("Update account: ", "failed");
+                                        }
+                                    } catch (Exception e) {
+                                        Log.d("Update account error: ", e.getMessage());
+                                    }
+                                }
+                            });
                     builder.setNegativeButton("Hủy", null);
                     builder.show();
+
                 }
             });
 
-
+            exitBtn.setOnClickListener(v -> {
+                AlertDialog.Builder builder = new AlertDialog.Builder(Activity_Add_Account.this);
+                builder.setTitle("Xác nhận")
+                        .setMessage("Bạn chưa hoàn thành chỉnh sửa, bạn có chắc chắn muốn thoát?");
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+                builder.setNegativeButton("Hủy", null);
+                builder.show();
+            });
         }  else {
 
-            doneBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String idUserNew = idUser.getText().toString();
-                    String usernameNew = username.getText().toString();
-                    String passwordNew = password.getText().toString();
-                    AccountDTO accountNew = new AccountDTO(null, idUserNew, usernameNew, passwordNew);
-                    if (idUser.getText().toString().equals("")
-                            || username.getText().toString().equals("") || password.getText().toString().equals("")) {
-                        Toast.makeText(Activity_Add_Account.this, "Hãy nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
-                    } else {
+            doneBtn.setOnClickListener(v -> {
+                String idUserNew = idUser.getText().toString();
+                String usernameNew = username.getText().toString();
+                String passwordNew = password.getText().toString();
+                AccountDTO accountNew = new AccountDTO(null, idUserNew, usernameNew, passwordNew);
+                if (idUser.getText().toString().equals("")
+                        || username.getText().toString().equals("") || password.getText().toString().equals("")) {
+                    Toast.makeText(Activity_Add_Account.this, "Hãy nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
+                } else {
 
-                        String subString = idUserNew.substring(0, 3);
-                        String[] subIdStaffArr = {"STA", "STU"};
-                        ArrayList<String> subIdStaffList = new ArrayList<>(Arrays.asList(subIdStaffArr));
-                        if (! subIdStaffList.contains(subString)) {
-                            Toast.makeText(Activity_Add_Account.this, "Hãy viết đúng định " +
-                                    "dạng mã của người dùng!", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
+                    String subString = idUserNew.substring(0, 3);
+                    String[] subIdStaffArr = {"STA", "STU"};
+                    ArrayList<String> subIdStaffList = new ArrayList<>(Arrays.asList(subIdStaffArr));
+                    if (! subIdStaffList.contains(subString)) {
+                        Toast.makeText(Activity_Add_Account.this, "Hãy viết đúng định " +
+                                "dạng mã của người dùng!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
-                        List<AccountDTO> listAccount = AccountDAO.getInstance(Activity_Add_Account.this)
-                                .selectAccountVer2(Activity_Add_Account.this,
-                                        "ID_USER = ? AND STATUS = ?",
+                    List<AccountDTO> listAccount = AccountDAO.getInstance(Activity_Add_Account.this)
+                            .selectAccountVer2(Activity_Add_Account.this,
+                                    "ID_USER = ? AND STATUS = ?",
+                                    new String[] {idUserNew, "0"});
+                  //  Log.d("List account to add account: ", String.valueOf(listAccount.isEmpty()));
+
+                    if (!listAccount.isEmpty()) {
+                        Toast.makeText(Activity_Add_Account.this, "Người dùng " +
+                                "này đã có tài khoản trên hệ thống!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if (subString.equals("STA")) {
+                        List<StaffDTO> listStaff = StaffDAO.getInstance(Activity_Add_Account.this)
+                                .SelectStaffVer2(Activity_Add_Account.this,
+                                        "ID_STAFF = ? AND STATUS = ?",
                                         new String[] {idUserNew, "0"});
-                      //  Log.d("List account to add account: ", String.valueOf(listAccount.isEmpty()));
-
-                        if (!listAccount.isEmpty()) {
-                            Toast.makeText(Activity_Add_Account.this, "Người dùng " +
-                                    "này đã có tài khoản trên hệ thống!", Toast.LENGTH_SHORT).show();
+                        if (listStaff.isEmpty()) {
+                            Toast.makeText(Activity_Add_Account.this, "Mã nhân viên này" +
+                                    " không tồn tại trên hệ thống", Toast.LENGTH_SHORT).show();
                             return;
                         }
+                    } else {
+                        List<OfficialStudentDTO> listStudent = OfficialStudentDAO.getInstance(Activity_Add_Account.this)
+                                .SelectStudentVer2(Activity_Add_Account.this,
+                                        "ID_STUDENT = ? AND STATUS = ?",
+                                        new String[] {idUserNew, "0"});
+                        if (listStudent.isEmpty()) {
+                            Toast.makeText(Activity_Add_Account.this, "Mã học viên này" +
+                                    " không tồn tại trên hệ thống", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }
 
-                        if (subString.equals("STA")) {
-                            List<StaffDTO> listStaff = StaffDAO.getInstance(Activity_Add_Account.this)
-                                    .SelectStaffVer2(Activity_Add_Account.this,
-                                            "ID_STAFF = ? AND STATUS = ?",
-                                            new String[] {idUserNew, "0"});
-                            if (listStaff.isEmpty()) {
-                                Toast.makeText(Activity_Add_Account.this, "Mã nhân viên này" +
-                                        " không tồn tại trên hệ thống", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
+                    try {
+
+                        int rowEffect = AccountDAO.getInstance(Activity_Add_Account.this).insertAccount(
+                                Activity_Add_Account.this, accountNew);
+                        if (rowEffect > 0) {
+                            Toast.makeText(Activity_Add_Account.this, "Thêm tài khoản mới thành công",
+                                    Toast.LENGTH_SHORT).show();
+
+                            idUser.setText("");
+                            username.setText("");
+                            password.setText("");
+
                         } else {
-                            List<OfficialStudentDTO> listStudent = OfficialStudentDAO.getInstance(Activity_Add_Account.this)
-                                    .SelectStudentVer2(Activity_Add_Account.this,
-                                            "ID_STUDENT = ? AND STATUS = ?",
-                                            new String[] {idUserNew, "0"});
-                            if (listStudent.isEmpty()) {
-                                Toast.makeText(Activity_Add_Account.this, "Mã học viên này" +
-                                        " không tồn tại trên hệ thống", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
+                            Log.d("Add new account: ", "failed");
                         }
-
-                        try {
-
-                            int rowEffect = AccountDAO.getInstance(Activity_Add_Account.this).insertAccount(
-                                    Activity_Add_Account.this, accountNew);
-                            if (rowEffect > 0) {
-                                Toast.makeText(Activity_Add_Account.this, "Thêm tài khoản mới thành công",
-                                        Toast.LENGTH_SHORT).show();
-
-                                idUser.setText("");
-                                username.setText("");
-                                password.setText("");
-
-                            } else {
-                                Log.d("Add new account: ", "failed");
-                            }
-                        } catch (Exception e) {
-                            Log.d("Add new account error", e.getMessage());
-                        }
+                    } catch (Exception e) {
+                        Log.d("Add new account error", e.getMessage());
                     }
                 }
             });
 
-            exitBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    finish();
-                }
-            });
-
+            exitBtn.setOnClickListener(v -> finish());
         }
-
     }
 }

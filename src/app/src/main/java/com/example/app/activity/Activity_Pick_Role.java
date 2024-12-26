@@ -32,7 +32,8 @@ public class Activity_Pick_Role extends AppCompatActivity {
 
         ButtonsAdapter adapter = new ButtonsAdapter(buttonTitles, buttonIcons, position -> {
             if (position == 0) {
-                Intent intent = new Intent(Activity_Pick_Role.this, Activity_Add_Certificate.class);
+                Intent intent = new Intent(Activity_Pick_Role.this, Activity_Notifications.class);
+                intent.putExtra("message", "Xem chứng chỉ");
                 startActivity(intent);
             } else if (position == 1) {
                 Intent intent = new Intent(Activity_Pick_Role.this, Activity_Login.class);
