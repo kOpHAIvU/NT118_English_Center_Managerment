@@ -248,8 +248,7 @@ public class Activity_Notifications_ToolBars_Second_Layer extends AppCompatActiv
         if (list.isEmpty())
             Toast.makeText(this, "Không tìm thấy dữ liệu nào", Toast.LENGTH_SHORT).show();
         else {
-            listAdapter.setFilterList(list);
-            //listAdapter.notifyDataSetChanged();
+//            listAdapter.setFilterList(list);
         }
     }
 }
