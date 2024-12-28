@@ -88,11 +88,11 @@ public class ClassDAO {
             LocalDate end = LocalDate.parse(endDate, formatter);
 
             if (now.isBefore(start)) {
-                return new Pair<>("Chưa bắt đầu", R.color.green); // Màu xanh
+                return new Pair<>("Chưa bắt đầu", R.color.yellow); // Màu xanh
             } else if (now.isAfter(end)) {
                 return new Pair<>("Đã kết thúc", R.color.red); // Màu đỏ
             } else {
-                return new Pair<>("Đang diễn ra", R.color.yellow); // Màu vàng
+                return new Pair<>("Đang diễn ra", R.color.green); // Màu vàng
             }
         } catch (DateTimeParseException e) {
             return new Pair<>("Không xác định", R.color.gray); // Màu xám
