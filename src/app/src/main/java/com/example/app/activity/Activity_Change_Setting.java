@@ -67,51 +67,37 @@ public class Activity_Change_Setting extends AppCompatActivity {
         setContentView(R.layout.activity_change_setting);
 
         birthdayInp = findViewById(R.id.input_birthday);
-        birthdayInp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Calendar cal = Calendar.getInstance();
-                int year = cal.get(Calendar.YEAR);
-                int month = cal.get(Calendar.MONTH);
-                int day = cal.get(Calendar.DAY_OF_MONTH);
+        birthdayInp.setOnClickListener(v -> {
+            Calendar cal = Calendar.getInstance();
+            int year = cal.get(Calendar.YEAR);
+            int month = cal.get(Calendar.MONTH);
+            int day = cal.get(Calendar.DAY_OF_MONTH);
 
-                DatePickerDialog dialog = new DatePickerDialog(
-                        Activity_Change_Setting.this,
-                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-                        birthDt,
-                        year, month, day);
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.show();
-            }
+            DatePickerDialog dialog = new DatePickerDialog(
+                    Activity_Change_Setting.this,
+                    android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                    birthDt,
+                    year, month, day);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.show();
         });
-        birthDt = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                month++;
-                birthdayInp.setText(dayOfMonth + "/" + month + "/" + year);
-            }
+        birthDt = (view, year, month, dayOfMonth) -> {
+            month++;
+            birthdayInp.setText(dayOfMonth + "/" + month + "/" + year);
         };
 
         genderInp = findViewById(R.id.input_gender);
         genderAdapter = new ArrayAdapter<String>(this, R.layout.combobox_item, genderItem);
         genderInp.setAdapter(genderAdapter);
-        genderInp.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String item = parent.getItemAtPosition(position).toString();
-            }
+        genderInp.setOnItemClickListener((parent, view, position, id) -> {
+            String item = parent.getItemAtPosition(position).toString();
         });
 
         phoneInp = findViewById(R.id.input_phone);
         addrInp = findViewById(R.id.input_addr);
         password = findViewById(R.id.password);
         password.setText(Activity_Login.password);
-        password.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openChangePasswordDialog(Gravity.CENTER);
-            }
-        });
+        password.setOnClickListener(v -> openChangePasswordDialog(Gravity.CENTER));
 
         nameInp = findViewById(R.id.name);
         position = findViewById(R.id.position);
@@ -218,81 +204,77 @@ public class Activity_Change_Setting extends AppCompatActivity {
         birthdayInp.setText(birthday);
         position.setText(positionText);
 
-        done.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        done.setOnClickListener(v -> {
 
-                if (genderInp.getText().toString().equals("") || phoneInp.getText().toString().equals("")
-                        || addrInp.getText().toString().equals("") || nameInp.getText().toString().equals("") || birthday.isEmpty()) {
-                    Toast.makeText(Activity_Change_Setting.this, "Nhập lại", Toast.LENGTH_SHORT).show();
-                } else {
+            if (genderInp.getText().toString().equals("") || phoneInp.getText().toString().equals("")
+                    || addrInp.getText().toString().equals("") || nameInp.getText().toString().equals("") || birthday.isEmpty()) {
+                Toast.makeText(Activity_Change_Setting.this, "Nhập lại", Toast.LENGTH_SHORT).show();
+            } else {
 
-                    // Handle updating user information
+                // Handle updating user information
 
-                    AlertDialog.Builder builder = new AlertDialog.Builder(Activity_Change_Setting.this);
-                    builder.setTitle("Bạn có chắc chắn muốn cập nhật dữ liệu không ?");
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            String genderUpdate = genderInp.getText().toString();
-                            String phoneNumberUpdate = phoneInp.getText().toString();
-                            String addressUpdate = addrInp.getText().toString();
-                            String birthdayUpdate = birthdayInp.getText().toString();
-                            String name = nameInp.getText().toString();
+                AlertDialog.Builder builder = new AlertDialog.Builder(Activity_Change_Setting.this);
+                builder.setTitle("Bạn có chắc chắn muốn cập nhật dữ liệu không ?");
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String genderUpdate = genderInp.getText().toString();
+                        String phoneNumberUpdate = phoneInp.getText().toString();
+                        String addressUpdate = addrInp.getText().toString();
+                        String birthdayUpdate = birthdayInp.getText().toString();
+                        String name = nameInp.getText().toString();
 
-                            // Update password
+                        // Update password
 
-                            AccountDTO updateAccount = new AccountDTO(Activity_Login.idAccount,
-                                    Activity_Login.idUser, Activity_Login.username, password.getText().toString());
-                            String whereClause = "ID_ACCOUNT = ?";
-                            String[] whereArg =  new String[]{Activity_Login.idAccount};
+                        AccountDTO updateAccount = new AccountDTO(Activity_Login.idAccount,
+                                Activity_Login.idUser, Activity_Login.username, password.getText().toString());
+                        String whereClause = "ID_ACCOUNT = ?";
+                        String[] whereArg =  new String[]{Activity_Login.idAccount};
 
-                            Activity_Login.password = password.getText().toString();
+                        Activity_Login.password = password.getText().toString();
 
-                            int rowEffect = AccountDAO.getInstance(Activity_Change_Setting.this).updateAccount(Activity_Change_Setting.this,
-                                    updateAccount, whereClause, whereArg);
-                            Log.d("Change account: ", String.valueOf(rowEffect));
-                            if (rowEffect > 0) {
+                        int rowEffect = AccountDAO.getInstance(Activity_Change_Setting.this).updateAccount(Activity_Change_Setting.this,
+                                updateAccount, whereClause, whereArg);
+                        Log.d("Change account: ", String.valueOf(rowEffect));
+                        if (rowEffect > 0) {
+                            isUpdate = true;
+                        }
+
+                        // Update individual information
+
+                        if (flag == 1) {
+                            OfficialStudentDTO student = new OfficialStudentDTO(idUser,
+                                    name, addressUpdate, phoneNumberUpdate, genderUpdate, birthdayUpdate, 0);
+                            String whereClauseUpdateInf = "ID_STUDENT = ?";
+                            String[] whereArgUpdateInf =  new String[]{Activity_Login.idUser};
+
+                            int rowEffectStudent = OfficialStudentDAO.getInstance(Activity_Change_Setting.this).updateOfficialStudent(Activity_Change_Setting.this,
+                                    student, whereClauseUpdateInf, whereArgUpdateInf);
+                            if (rowEffectStudent > 0) {
                                 isUpdate = true;
                             }
+                        } else {
+                            StaffDTO staff = new StaffDTO(idUser, name, addressUpdate, phoneNumberUpdate,
+                                    genderUpdate, birthdayUpdate, salary,  String.valueOf(type), 0);
+                            String whereClauseUpdateInf = "ID_STAFF = ?";
+                            String[] whereArgUpdateInf =  new String[]{Activity_Login.idUser};
 
-                            // Update individual information
-
-                            if (flag == 1) {
-                                OfficialStudentDTO student = new OfficialStudentDTO(idUser,
-                                        name, addressUpdate, phoneNumberUpdate, genderUpdate, birthdayUpdate, 0);
-                                String whereClauseUpdateInf = "ID_STUDENT = ?";
-                                String[] whereArgUpdateInf =  new String[]{Activity_Login.idUser};
-
-                                int rowEffectStudent = OfficialStudentDAO.getInstance(Activity_Change_Setting.this).updateOfficialStudent(Activity_Change_Setting.this,
-                                        student, whereClauseUpdateInf, whereArgUpdateInf);
-                                if (rowEffectStudent > 0) {
-                                    isUpdate = true;
-                                }
-                            } else {
-                                StaffDTO staff = new StaffDTO(idUser, name, addressUpdate, phoneNumberUpdate,
-                                        genderUpdate, birthdayUpdate, salary,  String.valueOf(type), 0);
-                                String whereClauseUpdateInf = "ID_STAFF = ?";
-                                String[] whereArgUpdateInf =  new String[]{Activity_Login.idUser};
-
-                                int rowEffectStaff = StaffDAO.getInstance(Activity_Change_Setting.this).updateStaff(Activity_Change_Setting.this,
-                                        staff, whereClauseUpdateInf, whereArgUpdateInf);
-                                if(rowEffectStaff > 0) {
-                                    isUpdate = true;
-                                }
+                            int rowEffectStaff = StaffDAO.getInstance(Activity_Change_Setting.this).updateStaff(Activity_Change_Setting.this,
+                                    staff, whereClauseUpdateInf, whereArgUpdateInf);
+                            if(rowEffectStaff > 0) {
+                                isUpdate = true;
                             }
-                            Toast.makeText(Activity_Change_Setting.this, "Cập nhật dữ liệu thành công !", Toast.LENGTH_SHORT).show();
-                            finish();
                         }
-                    });
+                        Toast.makeText(Activity_Change_Setting.this, "Cập nhật dữ liệu thành công !", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                });
 
-                    builder.setNegativeButton("Hủy", null);
+                builder.setNegativeButton("Hủy", null);
 
-                    builder.show();
+                builder.show();
 
-                }
             }
-
         });
 
     }
@@ -313,67 +295,56 @@ public class Activity_Change_Setting extends AppCompatActivity {
         retypePass = dialog.findViewById(R.id.retypePass);
 
         exitBtn = dialog.findViewById(R.id.exitBtn);
-        exitBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
+        exitBtn.setOnClickListener(v -> dialog.dismiss());
         doneBtn = dialog.findViewById(R.id.doneBtn);
-        doneBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Thêm cho t cái check sai mk nha
-               // oldPass = findViewById(R.id.oldPass);
+        doneBtn.setOnClickListener(v -> {
+            //Thêm cho t cái check sai mk nha
+           // oldPass = findViewById(R.id.oldPass);
 
-                if (oldPass.getText().toString() == "" || !password.getText().toString().equals(oldPass.getText().toString()))  {
-                    Toast.makeText(Activity_Change_Setting.this, "Sai mật khẩu", Toast.LENGTH_SHORT).show();
-                }
-                else if (newPass == null || newPass.getText().toString().length() < 8) {
-                    Toast.makeText(Activity_Change_Setting.this, "Mật khẩu phải có ít nhất 8 ký tự", Toast.LENGTH_SHORT).show();
-                }
-                else if (oldPass.getText().toString() == ""  || !newPass.getText().toString().equals(retypePass.getText().toString())) {
-                    Toast.makeText(Activity_Change_Setting.this, "Mật khẩu không trùng khớp", Toast.LENGTH_SHORT).show();
-                    Log.d("All passwords: ", newPass.getText().toString() + "  " + retypePass.getText().toString());
-                } else {
+            if (oldPass.getText().toString() == "" || !password.getText().toString().equals(oldPass.getText().toString()))  {
+                Toast.makeText(Activity_Change_Setting.this, "Sai mật khẩu", Toast.LENGTH_SHORT).show();
+            }
+            else if (newPass == null || newPass.getText().toString().length() < 8) {
+                Toast.makeText(Activity_Change_Setting.this, "Mật khẩu phải có ít nhất 8 ký tự", Toast.LENGTH_SHORT).show();
+            }
+            else if (oldPass.getText().toString() == ""  || !newPass.getText().toString().equals(retypePass.getText().toString())) {
+                Toast.makeText(Activity_Change_Setting.this, "Mật khẩu không trùng khớp", Toast.LENGTH_SHORT).show();
+                Log.d("All passwords: ", newPass.getText().toString() + "  " + retypePass.getText().toString());
+            } else {
 
 
-                    androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(Activity_Change_Setting.this);
-                    builder.setTitle("Thông báo")
-                            .setMessage("Bạn có chắn chắn muốn đổi mật khẩu không?");
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            AccountDTO account = new AccountDTO(Activity_Login.idAccount, Activity_Login.idUser,
-                                    Activity_Login.username, newPass.getText().toString());
-                            try {
-                                int rowEffect = AccountDAO.getInstance(Activity_Change_Setting.this)
-                                        .updateAccount(Activity_Change_Setting.this, account,
-                                                "ID_ACCOUNT = ? AND STATUS = ?",
-                                                new String[] {account.getIdAccount(), "0"});
-                                if (rowEffect > 0) {
-                                    Log.d("All passwords: ", oldPass.getText().toString() + "  " + newPass.getText().toString());
-                                    Toast.makeText(Activity_Change_Setting.this, "Đổi mật khẩu " +
-                                            "thành công!", Toast.LENGTH_SHORT).show();
-                                   // dialog.dismiss();
-                                } else {
-                                    Toast.makeText(Activity_Change_Setting.this, "Đổi mật khẩu " +
-                                            "thất bại!", Toast.LENGTH_SHORT).show();
-                                }
-                            } catch (Exception e)  {
-                                Log.d("Update password error: ", e.getMessage());
+                androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(Activity_Change_Setting.this);
+                builder.setTitle("Thông báo")
+                        .setMessage("Bạn có chắn chắn muốn đổi mật khẩu không?");
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog1, int which) {
+                        AccountDTO account = new AccountDTO(Activity_Login.idAccount, Activity_Login.idUser,
+                                Activity_Login.username, newPass.getText().toString());
+                        try {
+                            int rowEffect = AccountDAO.getInstance(Activity_Change_Setting.this)
+                                    .updateAccount(Activity_Change_Setting.this, account,
+                                            "ID_ACCOUNT = ? AND STATUS = ?",
+                                            new String[] {account.getIdAccount(), "0"});
+                            if (rowEffect > 0) {
+                                Log.d("All passwords: ", oldPass.getText().toString() + "  " + newPass.getText().toString());
+                                Toast.makeText(Activity_Change_Setting.this, "Đổi mật khẩu " +
+                                        "thành công!", Toast.LENGTH_SHORT).show();
+                               // dialog.dismiss();
+                            } else {
+                                Toast.makeText(Activity_Change_Setting.this, "Đổi mật khẩu " +
+                                        "thất bại!", Toast.LENGTH_SHORT).show();
                             }
+                        } catch (Exception e)  {
+                            Log.d("Update password error: ", e.getMessage());
                         }
-                    });
-                    builder.setNegativeButton("Hủy",null);
-                    builder.show();
+                    }
+                });
+                builder.setNegativeButton("Hủy",null);
+                builder.show();
 
-                    //dialog.dismiss();
-                }
-
-
+                //dialog.dismiss();
             }
         });
-
         dialog.show();
     }
 }

@@ -35,12 +35,7 @@ public class Activity_Notifications_Second_Layer extends AppCompatActivity {
 
         listView = findViewById(R.id.notification_listview);
         returnBtn = findViewById(R.id.return_to_frag_btn);
-        returnBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        returnBtn.setOnClickListener(v -> finish());
         dataArrayList = new ArrayList<>();
 
         if (!message1.equals("")) {

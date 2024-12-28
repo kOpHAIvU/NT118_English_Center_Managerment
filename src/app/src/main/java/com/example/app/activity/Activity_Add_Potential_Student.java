@@ -37,11 +37,8 @@ public class Activity_Add_Potential_Student extends AppCompatActivity {
         gender = findViewById(R.id.gender);
         genderAdapter = new ArrayAdapter<String>(this, R.layout.combobox_item, genderItem);
         gender.setAdapter(genderAdapter);
-        gender.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String item = parent.getItemAtPosition(position).toString();
-            }
+        gender.setOnItemClickListener((parent, view, position, id) -> {
+            String item = parent.getItemAtPosition(position).toString();
         });
 
         // studentID = findViewById(R.id.idStudent);
@@ -79,89 +76,17 @@ public class Activity_Add_Potential_Student extends AppCompatActivity {
                 Log.d("Potential Student ID: ", message);
             }
 
-            doneBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    boolean acceptSwitch = true;    //Đúng thì mới trả về Fragment_Setting
+            doneBtn.setOnClickListener(v -> {
+                boolean acceptSwitch = true;    //Đúng thì mới trả về Fragment_Setting
 
-                    if (address.getText().equals("")
-                            || level.getText().equals("") || appointmentNumber.getText().equals("")
-                            || studentName.getText().equals("") || gender.getText().equals("") || phoneNumber.getText().equals("")) {
-                        acceptSwitch = false;
-                    }
-                    Log.d("Shift update student: ", "ok");
-
-                    if (acceptSwitch) {
-
-                        if (!isInteger(appointmentNumber.getText().toString())) {
-                            Toast.makeText(Activity_Add_Potential_Student.this,
-                                    "Số lượng cuộc hẹn phải là số nguyên dương!",
-                                    Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        if (!Activity_Add_Official_Student.isValidPhoneNumber(phoneNumber.getText().toString())) {
-                            Toast.makeText(Activity_Add_Potential_Student.this, "Định dạng số điện thoại " +
-                                    "chưa chính xác!", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-
-                        try {
-                            if (!idStudent.equals("") || !idStudent.equals(null)) {
-
-                                AlertDialog.Builder builder = new AlertDialog.Builder(Activity_Add_Potential_Student.this);
-                                builder.setTitle("Thông báo")
-                                        .setMessage("Bạn có chắn chắn muốn chỉnh sửa thông tin của học viên không?");
-                                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        int rowEffect = PotentialStudentDAO.getInstance(Activity_Add_Potential_Student.this).updatePotentialStudent(
-                                                Activity_Add_Potential_Student.this, new PotentialStudentDTO(
-                                                        idStudent,
-                                                        studentName.getText().toString(),
-                                                        phoneNumber.getText().toString(),
-                                                        gender.getText().toString(),
-                                                        address.getText().toString(),
-                                                        level.getText().toString(),
-                                                        appointmentNumber.getText().toString()), "ID_STUDENT = ?", new String[]{idStudent});
-                                        Log.d("Update potential student: ", new PotentialStudentDTO(
-                                                idStudent,
-                                                studentName.getText().toString(),
-                                                phoneNumber.getText().toString(),
-                                                gender.getText().toString(),
-                                                address.getText().toString(),
-                                                level.getText().toString(),
-                                                appointmentNumber.getText().toString()).toString());
-                                        if (rowEffect > 0) {
-                                            Toast.makeText(Activity_Add_Potential_Student.this,
-                                                    "Sửa thông tin học viên tiềm năng thành công", Toast.LENGTH_SHORT).show();
-                                            Log.d("Add potential student:", "success");
-                                        }else {
-                                            Log.d("Add potential student:", "fail");
-                                        }
-                                    }
-                                });
-                                builder.setNegativeButton("Hủy", null);
-                                builder.show();
-                            }
-                        } catch (Exception e) {
-                            Log.d("Add potential student error:", "fail");
-                        }
-                    }
-                    else Toast.makeText(Activity_Add_Potential_Student.this, "Nhập lại", Toast.LENGTH_SHORT).show();
+                if (address.getText().equals("")
+                        || level.getText().equals("") || appointmentNumber.getText().equals("")
+                        || studentName.getText().equals("") || gender.getText().equals("") || phoneNumber.getText().equals("")) {
+                    acceptSwitch = false;
                 }
-            });
+                Log.d("Shift update student: ", "ok");
 
-        } else {
-            doneBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    if (studentName.getText().toString().equals("") || address.getText().toString().equals("") ||
-                            level.getText().toString().equals("") || appointmentNumber.getText().toString().equals("") ||
-                            gender.getText().toString().equals("") || phoneNumber.getText().toString().equals("")) {
-                        Toast.makeText(Activity_Add_Potential_Student.this, "Hãy nhập đầy đủ thông tin",
-                                Toast.LENGTH_SHORT).show();
-                        return;
-                    }
+                if (acceptSwitch) {
 
                     if (!isInteger(appointmentNumber.getText().toString())) {
                         Toast.makeText(Activity_Add_Potential_Student.this,
@@ -169,62 +94,119 @@ public class Activity_Add_Potential_Student extends AppCompatActivity {
                                 Toast.LENGTH_SHORT).show();
                         return;
                     }
-
                     if (!Activity_Add_Official_Student.isValidPhoneNumber(phoneNumber.getText().toString())) {
                         Toast.makeText(Activity_Add_Potential_Student.this, "Định dạng số điện thoại " +
                                 "chưa chính xác!", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
-                    Log.d("Add new potential student", "Ok");
-                    Log.d("Create dialog", "Ok");
-                    int rowEffect = PotentialStudentDAO.getInstance(Activity_Add_Potential_Student.this).InsertPotentialStudent(
-                            Activity_Add_Potential_Student.this, new PotentialStudentDTO(
-                                    idStudent,
-                                    studentName.getText().toString(),
-                                    phoneNumber.getText().toString(),
-                                    gender.getText().toString(),
-                                    address.getText().toString(),
-                                    level.getText().toString(),
-                                    appointmentNumber.getText().toString())
-                    );
+                    try {
+                        if (!idStudent.equals("") || !idStudent.equals(null)) {
 
-                    if (rowEffect > 0) {
-                        Toast.makeText(Activity_Add_Potential_Student.this,
-                                "Thêm học viên tiềm năng mới thành công", Toast.LENGTH_SHORT).show();
-                        Log.d("Add potential student:", "success");
-
-                        studentName.setText(null);
-                        address.setText(null);
-                        phoneNumber.setText(null);
-                        gender.setText(null);
-                        level.setText(null);
-                        appointmentNumber.setText(null);
-
-                    }else {
-                        Log.d("Add potential student:", "fail");
+                            AlertDialog.Builder builder = new AlertDialog.Builder(Activity_Add_Potential_Student.this);
+                            builder.setTitle("Thông báo")
+                                    .setMessage("Bạn có chắn chắn muốn chỉnh sửa thông tin của học viên không?");
+                            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    int rowEffect = PotentialStudentDAO.getInstance(Activity_Add_Potential_Student.this).updatePotentialStudent(
+                                            Activity_Add_Potential_Student.this, new PotentialStudentDTO(
+                                                    idStudent,
+                                                    studentName.getText().toString(),
+                                                    phoneNumber.getText().toString(),
+                                                    gender.getText().toString(),
+                                                    address.getText().toString(),
+                                                    level.getText().toString(),
+                                                    appointmentNumber.getText().toString()), "ID_STUDENT = ?", new String[]{idStudent});
+                                    Log.d("Update potential student: ", new PotentialStudentDTO(
+                                            idStudent,
+                                            studentName.getText().toString(),
+                                            phoneNumber.getText().toString(),
+                                            gender.getText().toString(),
+                                            address.getText().toString(),
+                                            level.getText().toString(),
+                                            appointmentNumber.getText().toString()).toString());
+                                    if (rowEffect > 0) {
+                                        Toast.makeText(Activity_Add_Potential_Student.this,
+                                                "Sửa thông tin học viên tiềm năng thành công", Toast.LENGTH_SHORT).show();
+                                        Log.d("Add potential student:", "success");
+                                    }else {
+                                        Log.d("Add potential student:", "fail");
+                                    }
+                                }
+                            });
+                            builder.setNegativeButton("Hủy", null);
+                            builder.show();
+                        }
+                    } catch (Exception e) {
+                        Log.d("Add potential student error:", "fail");
                     }
-                    //finish();
+                }
+                else Toast.makeText(Activity_Add_Potential_Student.this, "Nhập lại", Toast.LENGTH_SHORT).show();
+            });
+
+        } else {
+            doneBtn.setOnClickListener(v -> {
+
+                if (studentName.getText().toString().equals("") || address.getText().toString().equals("") ||
+                        level.getText().toString().equals("") || appointmentNumber.getText().toString().equals("") ||
+                        gender.getText().toString().equals("") || phoneNumber.getText().toString().equals("")) {
+                    Toast.makeText(Activity_Add_Potential_Student.this, "Hãy nhập đầy đủ thông tin",
+                            Toast.LENGTH_SHORT).show();
+                    return;
                 }
 
+                if (!isInteger(appointmentNumber.getText().toString())) {
+                    Toast.makeText(Activity_Add_Potential_Student.this,
+                            "Số lượng cuộc hẹn phải là số nguyên dương!",
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (!Activity_Add_Official_Student.isValidPhoneNumber(phoneNumber.getText().toString())) {
+                    Toast.makeText(Activity_Add_Potential_Student.this, "Định dạng số điện thoại " +
+                            "chưa chính xác!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                Log.d("Add new potential student", "Ok");
+                Log.d("Create dialog", "Ok");
+                int rowEffect = PotentialStudentDAO.getInstance(Activity_Add_Potential_Student.this).InsertPotentialStudent(
+                        Activity_Add_Potential_Student.this, new PotentialStudentDTO(
+                                idStudent,
+                                studentName.getText().toString(),
+                                phoneNumber.getText().toString(),
+                                gender.getText().toString(),
+                                address.getText().toString(),
+                                level.getText().toString(),
+                                appointmentNumber.getText().toString())
+                );
+
+                if (rowEffect > 0) {
+                    Toast.makeText(Activity_Add_Potential_Student.this,
+                            "Thêm học viên tiềm năng mới thành công", Toast.LENGTH_SHORT).show();
+                    Log.d("Add potential student:", "success");
+
+                    studentName.setText(null);
+                    address.setText(null);
+                    phoneNumber.setText(null);
+                    gender.setText(null);
+                    level.setText(null);
+                    appointmentNumber.setText(null);
+
+                }else {
+                    Log.d("Add potential student:", "fail");
+                }
+                //finish();
             });
         }
 
         exitBtn = findViewById(R.id.exit_btn);
-        exitBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
+        exitBtn.setOnClickListener(v -> finish());
     }
-
     public static boolean isInteger(String s) {
         if (s == null || s.isEmpty()) {
             return false;
         }
-
         try {
             Integer.parseInt(s);
             return true;

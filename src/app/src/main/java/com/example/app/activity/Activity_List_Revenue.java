@@ -42,60 +42,49 @@ public class Activity_List_Revenue extends AppCompatActivity {
         returnBtn = findViewById(R.id.return_to_frag_btn);
         totalMoney = findViewById(R.id.totalMoney);
 
-        returnBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        returnBtn.setOnClickListener(v -> finish());
 
         LocalDate now = LocalDate.now();
         year = findViewById(R.id.year);
         year.setText(String.valueOf(now.getYear()));
         yearAdapter = new ArrayAdapter<String>(this, R.layout.combobox_item, yearItem);
         year.setAdapter(yearAdapter);
-        year.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String item = parent.getItemAtPosition(position).toString();
-                dataArrayList = new ArrayList<>();
-                List<CollectionTuitionFeesDTO> collectingTuition = CollectionTuitionFeesDAO.getInstance(Activity_List_Revenue.this)
-                        .SelectCollectionTuitionFees(Activity_List_Revenue.this, month.getText().toString(),
-                                year.getText().toString());
-               // Log.d("List revenue show:", collectingTuition.toString());
-                int money = 0;
-                for (int i = 0; i < collectingTuition.size(); i++) {
-                    dataArrayList.add(collectingTuition.get(i));
-                    money += Integer.parseInt(collectingTuition.get(i).getMoney());
-                }
-                totalMoney.setText(String.valueOf(money));
-                listAdapter = new List_Adapter(Activity_List_Revenue.this, R.layout.list_collecting_tuition_fees_item, dataArrayList);
-                listView.setAdapter(listAdapter);
+        year.setOnItemClickListener((parent, view, position, id) -> {
+            String item = parent.getItemAtPosition(position).toString();
+            dataArrayList = new ArrayList<>();
+            List<CollectionTuitionFeesDTO> collectingTuition = CollectionTuitionFeesDAO.getInstance(Activity_List_Revenue.this)
+                    .SelectCollectionTuitionFees(Activity_List_Revenue.this, month.getText().toString(),
+                            year.getText().toString());
+           // Log.d("List revenue show:", collectingTuition.toString());
+            int money = 0;
+            for (int i = 0; i < collectingTuition.size(); i++) {
+                dataArrayList.add(collectingTuition.get(i));
+                money += Integer.parseInt(collectingTuition.get(i).getMoney());
             }
+            totalMoney.setText(String.valueOf(money));
+            listAdapter = new List_Adapter(Activity_List_Revenue.this, R.layout.list_collecting_tuition_fees_item, dataArrayList);
+            listView.setAdapter(listAdapter);
         });
 
         month = findViewById(R.id.month);
         month.setText(String.valueOf(now.getMonth().getValue()));
         monthAdapter = new ArrayAdapter<String>(this, R.layout.combobox_item, monthItem);
         month.setAdapter(monthAdapter);
-        month.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String item = parent.getItemAtPosition(position).toString();
-                dataArrayList = new ArrayList<>();
-                List<CollectionTuitionFeesDTO> collectingTuition = CollectionTuitionFeesDAO.getInstance(Activity_List_Revenue.this)
-                        .SelectCollectionTuitionFees(Activity_List_Revenue.this, month.getText().toString(),
-                                year.getText().toString());
-               // Log.d("List revenue show:", collectingTuition.toString());
-                int money = 0;
-                for (int i = 0; i < collectingTuition.size(); i++) {
-                    dataArrayList.add(collectingTuition.get(i));
-                    money += Integer.parseInt(collectingTuition.get(i).getMoney());
-                }
-                totalMoney.setText(String.valueOf(money));
-                listAdapter = new List_Adapter(Activity_List_Revenue.this, R.layout.list_collecting_tuition_fees_item, dataArrayList);
-                listView.setAdapter(listAdapter);
+        month.setOnItemClickListener((parent, view, position, id) -> {
+            String item = parent.getItemAtPosition(position).toString();
+            dataArrayList = new ArrayList<>();
+            List<CollectionTuitionFeesDTO> collectingTuition = CollectionTuitionFeesDAO.getInstance(Activity_List_Revenue.this)
+                    .SelectCollectionTuitionFees(Activity_List_Revenue.this, month.getText().toString(),
+                            year.getText().toString());
+           // Log.d("List revenue show:", collectingTuition.toString());
+            int money = 0;
+            for (int i = 0; i < collectingTuition.size(); i++) {
+                dataArrayList.add(collectingTuition.get(i));
+                money += Integer.parseInt(collectingTuition.get(i).getMoney());
             }
+            totalMoney.setText(String.valueOf(money));
+            listAdapter = new List_Adapter(Activity_List_Revenue.this, R.layout.list_collecting_tuition_fees_item, dataArrayList);
+            listView.setAdapter(listAdapter);
         });
 
         dataArrayList = new ArrayList<>();
@@ -113,6 +102,5 @@ public class Activity_List_Revenue extends AppCompatActivity {
         totalMoney.setText(String.valueOf(money));
         listAdapter = new List_Adapter(Activity_List_Revenue.this, R.layout.list_collecting_tuition_fees_item, dataArrayList);
         listView.setAdapter(listAdapter);
-
     }
 }

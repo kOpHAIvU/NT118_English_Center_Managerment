@@ -26,26 +26,16 @@ public class Activity_Add_Certificate extends AppCompatActivity {
         content = findViewById(R.id.content);
 
         if (!message.equals("")) {
-
         }
-
         exitBtn = findViewById(R.id.exit_btn);
-        exitBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        exitBtn.setOnClickListener(v -> finish());
 
         doneBtn = findViewById(R.id.done_btn);
-        doneBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if ( name.getText().toString().equals("") || content.getText().toString().equals("")) {
-                    Toast.makeText(Activity_Add_Certificate.this, "All fields are mandatory", Toast.LENGTH_SHORT).show();
-                } else {
-                    finish();
-                }
+        doneBtn.setOnClickListener(v -> {
+            if ( name.getText().toString().equals("") || content.getText().toString().equals("")) {
+                Toast.makeText(Activity_Add_Certificate.this, "All fields are mandatory", Toast.LENGTH_SHORT).show();
+            } else {
+                finish();
             }
         });
     }

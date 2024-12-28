@@ -51,116 +51,97 @@ public class Activity_Add_Notification extends AppCompatActivity {
             content.setText(notification.get(0).getDescription());
 
 
-            exitBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            exitBtn.setOnClickListener(v -> {
+                AlertDialog.Builder builder = new AlertDialog.Builder(Activity_Add_Notification.this);
+                builder.setTitle("Xác nhận")
+                        .setMessage("Bạn chưa hoàn thành chỉnh sửa, bạn có chắc chắn muốn thoát?");
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+                builder.setNegativeButton("Hủy", null);
+                builder.show();
+            });
+
+            doneBtn.setOnClickListener(v -> {
+                if (title.equals("") || content.equals("")) {
+                    Toast.makeText(Activity_Add_Notification.this,
+                            "Hãy nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
+                } else {
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(Activity_Add_Notification.this);
                     builder.setTitle("Xác nhận")
-                            .setMessage("Bạn chưa hoàn thành chỉnh sửa, bạn có chắc chắn muốn thoát?");
+                            .setMessage("Bạn có chắc chắn muốn sửa thông báo không?");
                     builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            finish();
+
+                            NotificationDTO notificationUpdate = new NotificationDTO(null, Activity_Login.idAccount,
+                                    title.getText().toString(), content.getText().toString());
+                            try {
+                                int rowEffect = NotificationDAO.getInstance(Activity_Add_Notification.this)
+                                        .UpdateNotification(Activity_Add_Notification.this,
+                                                notificationUpdate, "ID_NOTIFICATION = ? AND STATUS = ?",
+                                                new String[] {message, "0"});
+                                if (rowEffect > 0) {
+                                    Toast.makeText(Activity_Add_Notification.this, "Sửa thông" +
+                                            "báo thành công!", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(Activity_Add_Notification.this, "Sửa thông" +
+                                            "báo thất bại!", Toast.LENGTH_SHORT).show();
+                                }
+                            } catch(Exception e)  {
+                                Log.d("Update notification information: ", e.getMessage());
+                            }
                         }
                     });
                     builder.setNegativeButton("Hủy", null);
                     builder.show();
-                }
-            });
-
-            doneBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (title.equals("") || content.equals("")) {
-                        Toast.makeText(Activity_Add_Notification.this,
-                                "Hãy nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
-                    } else {
-
-                        AlertDialog.Builder builder = new AlertDialog.Builder(Activity_Add_Notification.this);
-                        builder.setTitle("Xác nhận")
-                                .setMessage("Bạn có chắc chắn muốn sửa thông báo không?");
-                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-
-                                NotificationDTO notificationUpdate = new NotificationDTO(null, Activity_Login.idAccount,
-                                        title.getText().toString(), content.getText().toString());
-                                try {
-                                    int rowEffect = NotificationDAO.getInstance(Activity_Add_Notification.this)
-                                            .UpdateNotification(Activity_Add_Notification.this,
-                                                    notificationUpdate, "ID_NOTIFICATION = ? AND STATUS = ?",
-                                                    new String[] {message, "0"});
-                                    if (rowEffect > 0) {
-                                        Toast.makeText(Activity_Add_Notification.this, "Sửa thông" +
-                                                "báo thành công!", Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        Toast.makeText(Activity_Add_Notification.this, "Sửa thông" +
-                                                "báo thất bại!", Toast.LENGTH_SHORT).show();
-                                    }
-                                } catch(Exception e)  {
-                                    Log.d("Update notification information: ", e.getMessage());
-                                }
-
-                            }
-                        });
-                        builder.setNegativeButton("Hủy", null);
-                        builder.show();
-
-                    }
                 }
             });
         } else {
 
             Log.d("Hello", "I'm im create;");
-            exitBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            exitBtn.setOnClickListener(v -> {
 
-                    AlertDialog.Builder builder = new AlertDialog.Builder(Activity_Add_Notification.this);
-                    builder.setTitle("Xác nhận")
-                            .setMessage("Bạn có chắc chắn muốn thoát?");
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            finish();
-                        }
-                    });
-                    builder.setNegativeButton("Hủy", null);
-                    builder.show();
-                }
-            });
-
-            doneBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (title.getText().toString().equals("") || content.getText().toString().equals("")) {
-                        Toast.makeText(Activity_Add_Notification.this,
-                                "Hãy nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
-                    } else {
-
-                        NotificationDTO notificationNew = new NotificationDTO(null, Activity_Login.idAccount,
-                                title.getText().toString(), content.getText().toString());
-                        try {
-                            int rowEffect = NotificationDAO.getInstance(Activity_Add_Notification.this)
-                                    .InsertNotification(Activity_Add_Notification.this, notificationNew);
-                            if (rowEffect > 0) {
-                                Toast.makeText(Activity_Add_Notification.this, "Thêm thông" +
-                                        "báo mới thành công!", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(Activity_Add_Notification.this, "Thêm thông" +
-                                        "báo mới thất bại!", Toast.LENGTH_SHORT).show();
-                            }
-                        } catch(Exception e)  {
-                            Log.d("Add new notification information: ", e.getMessage());
-                        }
-
-                        title.setText("");
-                        content.setText("");
-
+                AlertDialog.Builder builder = new AlertDialog.Builder(Activity_Add_Notification.this);
+                builder.setTitle("Xác nhận")
+                        .setMessage("Bạn có chắc chắn muốn thoát?");
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
                     }
-                }
+                });
+                builder.setNegativeButton("Hủy", null);
+                builder.show();
             });
 
-        }
+            doneBtn.setOnClickListener(v -> {
+                if (title.getText().toString().equals("") || content.getText().toString().equals("")) {
+                    Toast.makeText(Activity_Add_Notification.this,
+                            "Hãy nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
+                } else {
 
+                    NotificationDTO notificationNew = new NotificationDTO(null, Activity_Login.idAccount,
+                            title.getText().toString(), content.getText().toString());
+                    try {
+                        int rowEffect = NotificationDAO.getInstance(Activity_Add_Notification.this)
+                                .InsertNotification(Activity_Add_Notification.this, notificationNew);
+                        if (rowEffect > 0) {
+                            Toast.makeText(Activity_Add_Notification.this, "Thêm thông" +
+                                    "báo mới thành công!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(Activity_Add_Notification.this, "Thêm thông" +
+                                    "báo mới thất bại!", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch(Exception e)  {
+                        Log.d("Add new notification information: ", e.getMessage());
+                    }
+                    title.setText("");
+                    content.setText("");
+                }
+            });
+        }
     }
 /*
    @Override

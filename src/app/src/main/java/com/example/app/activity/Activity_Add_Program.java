@@ -34,27 +34,19 @@ public class Activity_Add_Program extends AppCompatActivity {
         certificate = findViewById(R.id.certificate);
 
         exitBtn = findViewById(R.id.exit_btn);
-        exitBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        exitBtn.setOnClickListener(v -> finish());
 
         doneBtn = findViewById(R.id.done_btn);
-        doneBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (idProgram.getText().toString().equals("") || programName.getText().toString().equals("")
-                        || inputScore.getText().toString().equals("") || outputScore.getText().toString().equals("")
-                        || content.getText().toString().equals("") || speak.getText().toString().equals("")
-                        || write.getText().toString().equals("") || listen.getText().toString().equals("")
-                        || read.getText().toString().equals("") || tuitionFees.getText().toString().equals("")
-                        || studyPeriod.getText().toString().equals("") || certificate.toString().equals("")) {
-                    Toast.makeText(Activity_Add_Program.this, "All fields are mandatory", Toast.LENGTH_SHORT).show();
-                } else {
-                    finish();
-                }
+        doneBtn.setOnClickListener(v -> {
+            if (idProgram.getText().toString().equals("") || programName.getText().toString().equals("")
+                    || inputScore.getText().toString().equals("") || outputScore.getText().toString().equals("")
+                    || content.getText().toString().equals("") || speak.getText().toString().equals("")
+                    || write.getText().toString().equals("") || listen.getText().toString().equals("")
+                    || read.getText().toString().equals("") || tuitionFees.getText().toString().equals("")
+                    || studyPeriod.getText().toString().equals("") || certificate.toString().equals("")) {
+                Toast.makeText(Activity_Add_Program.this, "All fields are mandatory", Toast.LENGTH_SHORT).show();
+            } else {
+                finish();
             }
         });
     }

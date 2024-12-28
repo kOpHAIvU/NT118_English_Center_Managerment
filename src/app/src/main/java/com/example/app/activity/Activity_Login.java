@@ -2,7 +2,9 @@ package com.example.app.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
@@ -52,6 +54,7 @@ public class Activity_Login extends AppCompatActivity {
     public static String password;
     public static String username;
     public static String idAccount;
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,60 +66,48 @@ public class Activity_Login extends AppCompatActivity {
         loginBtn = findViewById(R.id.login_btn);
         fogotPassBtn = findViewById(R.id.fogotPassBtn);
 
-        fogotPassBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(Activity_Login.this, Activity_Forgot_Password.class));
-            }
-        });
+        fogotPassBtn.setOnClickListener(v -> startActivity(new Intent(Activity_Login.this, Activity_Forgot_Password.class)));
 
         // Initialize database
 
         DataProvider.getInstance(Activity_Login.this).recreateDatabase(Activity_Login.this);
 
-        loginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        loginBtn.setOnClickListener(view -> {
 
-                // handle login event
-                username = usernameInput.getText().toString();
-                password = passwordInput.getText().toString();
-                if (username.isEmpty() || password.isEmpty()) {
-                    Toast.makeText(Activity_Login.this, "Hãy nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
+            // handle login event
+            username = usernameInput.getText().toString();
+            password = passwordInput.getText().toString();
+            if (username.isEmpty() || password.isEmpty()) {
+                Toast.makeText(Activity_Login.this, "Hãy nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
+            } else {
+
+                String whereClause = "USERNAME = ? AND PASSWORD = ?";
+                String[] whereArgs = new String[]{username, password};
+                Cursor cursor = AccountDAO.getInstance(Activity_Login.this).selectAccount(Activity_Login.this, whereClause, whereArgs);
+
+                if (cursor != null && cursor.getCount() > 0) {
+                    Intent intent = new Intent(Activity_Login.this, Activity_Main_Screen.class);
+                    startActivity(intent);
                 } else {
-
-                    String whereClause = "USERNAME = ? AND PASSWORD = ?";
-                    String[] whereArgs = new String[]{username, password};
-                    Cursor cursor = AccountDAO.getInstance(Activity_Login.this).selectAccount(Activity_Login.this, whereClause, whereArgs);
-
-                    if (cursor != null && cursor.getCount() > 0) {
-                        Intent intent = new Intent(Activity_Login.this, Activity_Main_Screen.class);
-                        startActivity(intent);
-                    } else {
-                        Toast.makeText(Activity_Login.this, "Hãy nhập đúng " +
-                                "tên đăng nhập và mật khẩu!", Toast.LENGTH_SHORT).show();
-                    }
-
-                    if (cursor.moveToFirst()) {
-                        do {
-                            int idIndex = cursor.getColumnIndex("ID_USER");
-                            if (idIndex != -1) {
-                                idUser = cursor.getString(idIndex);
-                            }
-                            int idAccIndex = cursor.getColumnIndex("ID_ACCOUNT");
-                            if (idAccIndex != -1) {
-                                idAccount = cursor.getString(idAccIndex);
-                            }
-
-                        } while (cursor.moveToNext());
-                    }
-
-                    cursor.close();
+                    Toast.makeText(Activity_Login.this, "Hãy nhập đúng " +
+                            "tên đăng nhập và mật khẩu!", Toast.LENGTH_SHORT).show();
                 }
 
+                if (cursor.moveToFirst()) {
+                    do {
+                        int idIndex = cursor.getColumnIndex("ID_USER");
+                        if (idIndex != -1) {
+                            idUser = cursor.getString(idIndex);
+                        }
+                        int idAccIndex = cursor.getColumnIndex("ID_ACCOUNT");
+                        if (idAccIndex != -1) {
+                            idAccount = cursor.getString(idAccIndex);
+                        }
+                    } while (cursor.moveToNext());
+                }
+                cursor.close();
             }
         });
-
     }
 
     @Override
@@ -124,79 +115,75 @@ public class Activity_Login extends AppCompatActivity {
         super.onStart();
         DataProvider.getInstance(Activity_Login.this).recreateDatabase(Activity_Login.this);
 
-        loginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        loginBtn.setOnClickListener(view -> {
+            // handle login event
+            username = usernameInput.getText().toString();
+            password = passwordInput.getText().toString();
+            if (username.isEmpty() || password.isEmpty()) {
+                Toast.makeText(Activity_Login.this, "Hãy nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
+            } else {
+                String whereClause = "USERNAME = ? AND PASSWORD = ?";
+                String[] whereArgs = new String[]{username, password};
+                Cursor cursor = AccountDAO.getInstance(Activity_Login.this).selectAccount(Activity_Login.this, whereClause, whereArgs);
 
-                // handle login event
-                username = usernameInput.getText().toString();
-                password = passwordInput.getText().toString();
-                if (username.isEmpty() || password.isEmpty()) {
-                    Toast.makeText(Activity_Login.this, "Hãy nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
+                if (cursor != null && cursor.getCount() > 0) {
+                    Intent intent = new Intent(Activity_Login.this, Activity_Main_Screen.class);
+                    startActivity(intent);
                 } else {
-
-                    String whereClause = "USERNAME = ? AND PASSWORD = ?";
-                    String[] whereArgs = new String[]{username, password};
-                    Cursor cursor = AccountDAO.getInstance(Activity_Login.this).selectAccount(Activity_Login.this, whereClause, whereArgs);
-
-                    if (cursor != null && cursor.getCount() > 0) {
-                        Intent intent = new Intent(Activity_Login.this, Activity_Main_Screen.class);
-                        startActivity(intent);
-                    } else {
-                        Toast.makeText(Activity_Login.this, "Hãy nhập đúng tên đăng " +
-                                "nhập và mật khẩu!", Toast.LENGTH_SHORT).show();
-                    }
-
-                    if (cursor.moveToFirst()) {
-                        do {
-                            int idIndex = cursor.getColumnIndex("ID_USER");
-                            if (idIndex != -1) {
-                                idUser = cursor.getString(idIndex);
-                            }
-                            int idAccIndex = cursor.getColumnIndex("ID_ACCOUNT");
-                            if (idAccIndex != -1) {
-                                idAccount = cursor.getString(idAccIndex);
-                            }
-
-                        } while (cursor.moveToNext());
-                    }
-
-                    cursor.close();
+                    Toast.makeText(Activity_Login.this, "Hãy nhập đúng tên đăng " +
+                            "nhập và mật khẩu!", Toast.LENGTH_SHORT).show();
                 }
 
+                if (cursor.moveToFirst()) {
+                    do {
+                        int idIndex = cursor.getColumnIndex("ID_USER");
+                        if (idIndex != -1) {
+                            idUser = cursor.getString(idIndex);
+                        }
+                        int idAccIndex = cursor.getColumnIndex("ID_ACCOUNT");
+                        if (idAccIndex != -1) {
+                            idAccount = cursor.getString(idAccIndex);
+                        }
+
+                    } while (cursor.moveToNext());
+                }
+                cursor.close();
             }
         });
+        sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
 
         insertData();
     }
 
     private void insertData() {
+        boolean insertedData = sharedPreferences.getBoolean("insertedData", false);
+        if(insertedData) return;
         // Official Student
         OfficialStudentDTO student1 = new OfficialStudentDTO(null, "Nguyen Van A", "Binh Dinh", "0312345678", "Nam", "22/2/2022", 0);
-        OfficialStudentDAO.getInstance(Activity_Login.this).insertOfficialStudent(Activity_Login.this, student1);
         OfficialStudentDTO student2 = new OfficialStudentDTO(null, "Le Thi B", "Binh Duong","0332323222", "Nữ", "22/2/2022", 0 );
-        OfficialStudentDAO.getInstance(Activity_Login.this).insertOfficialStudent(Activity_Login.this, student2);
         OfficialStudentDTO student3 = new OfficialStudentDTO(null, "Ho Thi C", "TP Hồ Chí Minh","036723222", "Nam", "22/2/2022", 0 );
-        OfficialStudentDAO.getInstance(Activity_Login.this).insertOfficialStudent(Activity_Login.this, student3);
         OfficialStudentDTO student4 = new OfficialStudentDTO(null, "Nguyen Thi D", "Hà Nội","0332323222", "Nữ", "22/2/2022", 0 );
-        OfficialStudentDAO.getInstance(Activity_Login.this).insertOfficialStudent(Activity_Login.this, student4);
         OfficialStudentDTO student5 = new OfficialStudentDTO(null, "Le Thi E", "Phú Yên","0345678901", "Nam", "22/2/2022", 0 );
-        OfficialStudentDAO.getInstance(Activity_Login.this).insertOfficialStudent(Activity_Login.this, student5);
         OfficialStudentDTO student6 = new OfficialStudentDTO(null, "Hoang Thi F", "Đồng Nai","0345623777", "Nữ", "22/2/2022", 0 );
+        OfficialStudentDAO.getInstance(Activity_Login.this).insertOfficialStudent(Activity_Login.this, student1);
+        OfficialStudentDAO.getInstance(Activity_Login.this).insertOfficialStudent(Activity_Login.this, student2);
+        OfficialStudentDAO.getInstance(Activity_Login.this).insertOfficialStudent(Activity_Login.this, student3);
+        OfficialStudentDAO.getInstance(Activity_Login.this).insertOfficialStudent(Activity_Login.this, student4);
+        OfficialStudentDAO.getInstance(Activity_Login.this).insertOfficialStudent(Activity_Login.this, student5);
         OfficialStudentDAO.getInstance(Activity_Login.this).insertOfficialStudent(Activity_Login.this, student6);
 
         // Insert data in STAFF
         StaffDTO staff1 = new StaffDTO(null, "Nguyen Thi C", "TP HCM", "0343333333", "Nữ", "12/6/2022", 10000000, "1",0);
-        StaffDAO.getInstance(Activity_Login.this).insertStaff(Activity_Login.this, staff1);
         StaffDTO staff2 = new StaffDTO(null, "Nguyen Thi D", "Đồng Nai", "03466555333", "Nữ","14/2/2022", 2000000, "2",0);
-        StaffDAO.getInstance(Activity_Login.this).insertStaff(Activity_Login.this, staff2);
         StaffDTO staff3 = new StaffDTO(null, "Nguyen Thi E", "Bình Định", "03435555333", "Nữ","27/2/2022", 15000000, "3",0);
+        StaffDAO.getInstance(Activity_Login.this).insertStaff(Activity_Login.this, staff1);
+        StaffDAO.getInstance(Activity_Login.this).insertStaff(Activity_Login.this, staff2);
         StaffDAO.getInstance(Activity_Login.this).insertStaff(Activity_Login.this, staff3);
 
         // Insert data in TEACHERS
         TeacherDTO teacher1 = new TeacherDTO(null, "Nguyen Thi G", "Binh Duong", "0312345678", "Nữ", "22/5/2022", 5000000);
-        TeacherDAO.getInstance(Activity_Login.this).insertTeacher(Activity_Login.this, teacher1);
         TeacherDTO teacher2 = new TeacherDTO(null, "Nguyen Thi H", "Đồng Nai", "0346699966", "Nam", "14/2/2022", 15000000);
+        TeacherDAO.getInstance(Activity_Login.this).insertTeacher(Activity_Login.this, teacher1);
         TeacherDAO.getInstance(Activity_Login.this).insertTeacher(Activity_Login.this, teacher2);
 
         // Insert data in Certificate
@@ -211,12 +198,9 @@ public class Activity_Login extends AppCompatActivity {
                 "TOEIC là một chứng chỉ tiếng " +
                         "Anh quốc tế, đánh giá khả năng sử dụng tiếng Anh trong môi trường làm " +
                         "việc toàn cầu");
-        CertificateDAO.getInstance(Activity_Login.this).InsertCertificate(Activity_Login.this,
-                certificate3);
-        CertificateDAO.getInstance(Activity_Login.this).InsertCertificate(Activity_Login.this,
-                certificate1);
-        CertificateDAO.getInstance(Activity_Login.this).InsertCertificate(Activity_Login.this,
-                certificate2);
+        CertificateDAO.getInstance(Activity_Login.this).InsertCertificate(Activity_Login.this, certificate3);
+        CertificateDAO.getInstance(Activity_Login.this).InsertCertificate(Activity_Login.this, certificate1);
+        CertificateDAO.getInstance(Activity_Login.this).InsertCertificate(Activity_Login.this, certificate2);
 
         // Program
         ProgramDTO program1 = new ProgramDTO(null, "Chứng chỉ ielts academic",
@@ -227,8 +211,7 @@ public class Activity_Login extends AppCompatActivity {
                 "5.0", "6.5", "Cải thiện khả năng nói",
                 "6.5", "6.5", "7.0", "7.0",
                 10000000, "6 tháng", "CER1");
-        ProgramDAO.getInstance(Activity_Login.this).InsertProgram(Activity_Login.this, program1);
-        ProgramDAO.getInstance(Activity_Login.this).InsertProgram(Activity_Login.this, program2);
+
         ProgramDTO program3 = new ProgramDTO(null, "Chứng chỉ ielts general",
                 "5.0", "6.5", "Cải thiện khả năng nghe",
                 "5.5", "6.5", "7.0", "7.0",
@@ -237,8 +220,7 @@ public class Activity_Login extends AppCompatActivity {
                 "5.0", "6.5", "Cải thiện khả năng nói",
                 "6.5", "6.5", "7.0", "7.0",
                 10000000, "6 tháng", "CER2");
-        ProgramDAO.getInstance(Activity_Login.this).InsertProgram(Activity_Login.this, program3);
-        ProgramDAO.getInstance(Activity_Login.this).InsertProgram(Activity_Login.this, program4);
+
         ProgramDTO program5 = new ProgramDTO(null, "Chứng chỉ toeic 500-880",
                 "5.0", "6.5", "Cải thiện khả năng nghe",
                 "5.5", "6.5", "7.0", "7.0",
@@ -247,6 +229,10 @@ public class Activity_Login extends AppCompatActivity {
                 "5.0", "6.5", "Cải thiện khả năng nói",
                 "6.5", "6.5", "7.0", "7.0",
                 10000000, "6 tháng", "CER3");
+        ProgramDAO.getInstance(Activity_Login.this).InsertProgram(Activity_Login.this, program1);
+        ProgramDAO.getInstance(Activity_Login.this).InsertProgram(Activity_Login.this, program2);
+        ProgramDAO.getInstance(Activity_Login.this).InsertProgram(Activity_Login.this, program3);
+        ProgramDAO.getInstance(Activity_Login.this).InsertProgram(Activity_Login.this, program4);
         ProgramDAO.getInstance(Activity_Login.this).InsertProgram(Activity_Login.this, program5);
         ProgramDAO.getInstance(Activity_Login.this).InsertProgram(Activity_Login.this, program6);
 
@@ -306,26 +292,16 @@ public class Activity_Login extends AppCompatActivity {
                 "CLS4", "CLA4");
         ScheduleDTO schedule10 = new ScheduleDTO(null, "8", "9", "11",
                 "CLS2", "CLA5");
-        ScheduleDAO.getInstance(Activity_Login.this).InsertSchedule(Activity_Login.this,
-                schedule10);
-        ScheduleDAO.getInstance(Activity_Login.this).InsertSchedule(Activity_Login.this,
-                schedule9);
-        ScheduleDAO.getInstance(Activity_Login.this).InsertSchedule(Activity_Login.this,
-                schedule8);
-        ScheduleDAO.getInstance(Activity_Login.this).InsertSchedule(Activity_Login.this,
-                schedule7);
-        ScheduleDAO.getInstance(Activity_Login.this).InsertSchedule(Activity_Login.this,
-                schedule6);
-        ScheduleDAO.getInstance(Activity_Login.this).InsertSchedule(Activity_Login.this,
-                schedule5);
-        ScheduleDAO.getInstance(Activity_Login.this).InsertSchedule(Activity_Login.this,
-                schedule4);
-        ScheduleDAO.getInstance(Activity_Login.this).InsertSchedule(Activity_Login.this,
-                schedule3);
-        ScheduleDAO.getInstance(Activity_Login.this).InsertSchedule(Activity_Login.this,
-                schedule1);
-        ScheduleDAO.getInstance(Activity_Login.this).InsertSchedule(Activity_Login.this,
-                schedule2);
+        ScheduleDAO.getInstance(Activity_Login.this).InsertSchedule(Activity_Login.this,  schedule10);
+        ScheduleDAO.getInstance(Activity_Login.this).InsertSchedule(Activity_Login.this,  schedule9);
+        ScheduleDAO.getInstance(Activity_Login.this).InsertSchedule(Activity_Login.this,  schedule8);
+        ScheduleDAO.getInstance(Activity_Login.this).InsertSchedule(Activity_Login.this,  schedule7);
+        ScheduleDAO.getInstance(Activity_Login.this).InsertSchedule(Activity_Login.this,  schedule6);
+        ScheduleDAO.getInstance(Activity_Login.this).InsertSchedule(Activity_Login.this,  schedule5);
+        ScheduleDAO.getInstance(Activity_Login.this).InsertSchedule(Activity_Login.this,  schedule4);
+        ScheduleDAO.getInstance(Activity_Login.this).InsertSchedule(Activity_Login.this,  schedule3);
+        ScheduleDAO.getInstance(Activity_Login.this).InsertSchedule(Activity_Login.this,  schedule1);
+        ScheduleDAO.getInstance(Activity_Login.this).InsertSchedule(Activity_Login.this,  schedule2);
 
         // Collecting Tuition Fees
         CollectionTuitionFeesDTO collectionTuitionFees2 = new CollectionTuitionFeesDTO(
@@ -391,18 +367,12 @@ public class Activity_Login extends AppCompatActivity {
                 "Format Toeic", "22/12/2024", "CLS5", "CLA1");
         ExaminationDTO exam6 = new ExaminationDTO(null, "Kiểm tra cuối khóa",
                 "Format Toeic", "22/12/2024", "CLS6", "CLA1");
-        ExaminationDAO.getInstance(Activity_Login.this).InsertExamination(Activity_Login.this,
-                exam6);
-        ExaminationDAO.getInstance(Activity_Login.this).InsertExamination(Activity_Login.this,
-                exam5);
-        ExaminationDAO.getInstance(Activity_Login.this).InsertExamination(Activity_Login.this,
-                exam4);
-        ExaminationDAO.getInstance(Activity_Login.this).InsertExamination(Activity_Login.this,
-                exam3);
-        ExaminationDAO.getInstance(Activity_Login.this).InsertExamination(Activity_Login.this,
-                exam1);
-        ExaminationDAO.getInstance(Activity_Login.this).InsertExamination(Activity_Login.this,
-                exam2);
+        ExaminationDAO.getInstance(Activity_Login.this).InsertExamination(Activity_Login.this, exam6);
+        ExaminationDAO.getInstance(Activity_Login.this).InsertExamination(Activity_Login.this, exam5);
+        ExaminationDAO.getInstance(Activity_Login.this).InsertExamination(Activity_Login.this, exam4);
+        ExaminationDAO.getInstance(Activity_Login.this).InsertExamination(Activity_Login.this, exam3);
+        ExaminationDAO.getInstance(Activity_Login.this).InsertExamination(Activity_Login.this, exam1);
+        ExaminationDAO.getInstance(Activity_Login.this).InsertExamination(Activity_Login.this, exam2);
 
         // Insert data in ExamScore
 
@@ -430,30 +400,18 @@ public class Activity_Login extends AppCompatActivity {
                 "600", "700", "600", "650");
         ExamScoreDTO examScore12 = new ExamScoreDTO(null, "EXA1", "STU6",
                 "660", "700", "600", "600");
-        ExamScoreDAO.getInstance(Activity_Login.this).InsertExamScore(Activity_Login.this,
-                examScore1);
-        ExamScoreDAO.getInstance(Activity_Login.this).InsertExamScore(Activity_Login.this,
-                examScore2);
-        ExamScoreDAO.getInstance(Activity_Login.this).InsertExamScore(Activity_Login.this,
-                examScore3);
-        ExamScoreDAO.getInstance(Activity_Login.this).InsertExamScore(Activity_Login.this,
-                examScore4);
-        ExamScoreDAO.getInstance(Activity_Login.this).InsertExamScore(Activity_Login.this,
-                examScore5);
-        ExamScoreDAO.getInstance(Activity_Login.this).InsertExamScore(Activity_Login.this,
-                examScore6);
-        ExamScoreDAO.getInstance(Activity_Login.this).InsertExamScore(Activity_Login.this,
-                examScore7);
-        ExamScoreDAO.getInstance(Activity_Login.this).InsertExamScore(Activity_Login.this,
-                examScore8);
-        ExamScoreDAO.getInstance(Activity_Login.this).InsertExamScore(Activity_Login.this,
-                examScore9);
-        ExamScoreDAO.getInstance(Activity_Login.this).InsertExamScore(Activity_Login.this,
-                examScore10);
-        ExamScoreDAO.getInstance(Activity_Login.this).InsertExamScore(Activity_Login.this,
-                examScore11);
-        ExamScoreDAO.getInstance(Activity_Login.this).InsertExamScore(Activity_Login.this,
-                examScore12);
+        ExamScoreDAO.getInstance(Activity_Login.this).InsertExamScore(Activity_Login.this, examScore1);
+        ExamScoreDAO.getInstance(Activity_Login.this).InsertExamScore(Activity_Login.this, examScore2);
+        ExamScoreDAO.getInstance(Activity_Login.this).InsertExamScore(Activity_Login.this, examScore3);
+        ExamScoreDAO.getInstance(Activity_Login.this).InsertExamScore(Activity_Login.this, examScore4);
+        ExamScoreDAO.getInstance(Activity_Login.this).InsertExamScore(Activity_Login.this, examScore5);
+        ExamScoreDAO.getInstance(Activity_Login.this).InsertExamScore(Activity_Login.this, examScore6);
+        ExamScoreDAO.getInstance(Activity_Login.this).InsertExamScore(Activity_Login.this, examScore7);
+        ExamScoreDAO.getInstance(Activity_Login.this).InsertExamScore(Activity_Login.this, examScore8);
+        ExamScoreDAO.getInstance(Activity_Login.this).InsertExamScore(Activity_Login.this, examScore9);
+        ExamScoreDAO.getInstance(Activity_Login.this).InsertExamScore(Activity_Login.this, examScore10);
+        ExamScoreDAO.getInstance(Activity_Login.this).InsertExamScore(Activity_Login.this, examScore11);
+        ExamScoreDAO.getInstance(Activity_Login.this).InsertExamScore(Activity_Login.this, examScore12);
 
         // Insert data in Teaching
 
@@ -469,30 +427,18 @@ public class Activity_Login extends AppCompatActivity {
         TeachingDTO teaching10 = new TeachingDTO(null, "STU4", "CLS3");
         TeachingDTO teaching11 = new TeachingDTO(null, "STU5", "CLS2");
         TeachingDTO teaching12 = new TeachingDTO(null, "STU6", "CLS1");
-        TeachingDAO.getInstance(Activity_Login.this).InsertTeaching(Activity_Login.this,
-                teaching1);
-        TeachingDAO.getInstance(Activity_Login.this).InsertTeaching(Activity_Login.this,
-                teaching2);
-        TeachingDAO.getInstance(Activity_Login.this).InsertTeaching(Activity_Login.this,
-                teaching3);
-        TeachingDAO.getInstance(Activity_Login.this).InsertTeaching(Activity_Login.this,
-                teaching4);
-        TeachingDAO.getInstance(Activity_Login.this).InsertTeaching(Activity_Login.this,
-                teaching5);
-        TeachingDAO.getInstance(Activity_Login.this).InsertTeaching(Activity_Login.this,
-                teaching6);
-        TeachingDAO.getInstance(Activity_Login.this).InsertTeaching(Activity_Login.this,
-                teaching7);
-        TeachingDAO.getInstance(Activity_Login.this).InsertTeaching(Activity_Login.this,
-                teaching8);
-        TeachingDAO.getInstance(Activity_Login.this).InsertTeaching(Activity_Login.this,
-                teaching9);
-        TeachingDAO.getInstance(Activity_Login.this).InsertTeaching(Activity_Login.this,
-                teaching10);
-        TeachingDAO.getInstance(Activity_Login.this).InsertTeaching(Activity_Login.this,
-                teaching11);
-        TeachingDAO.getInstance(Activity_Login.this).InsertTeaching(Activity_Login.this,
-                teaching12);
+        TeachingDAO.getInstance(Activity_Login.this).InsertTeaching(Activity_Login.this, teaching1);
+        TeachingDAO.getInstance(Activity_Login.this).InsertTeaching(Activity_Login.this, teaching2);
+        TeachingDAO.getInstance(Activity_Login.this).InsertTeaching(Activity_Login.this, teaching3);
+        TeachingDAO.getInstance(Activity_Login.this).InsertTeaching(Activity_Login.this, teaching4);
+        TeachingDAO.getInstance(Activity_Login.this).InsertTeaching(Activity_Login.this, teaching5);
+        TeachingDAO.getInstance(Activity_Login.this).InsertTeaching(Activity_Login.this, teaching6);
+        TeachingDAO.getInstance(Activity_Login.this).InsertTeaching(Activity_Login.this, teaching7);
+        TeachingDAO.getInstance(Activity_Login.this).InsertTeaching(Activity_Login.this, teaching8);
+        TeachingDAO.getInstance(Activity_Login.this).InsertTeaching(Activity_Login.this, teaching9);
+        TeachingDAO.getInstance(Activity_Login.this).InsertTeaching(Activity_Login.this, teaching10);
+        TeachingDAO.getInstance(Activity_Login.this).InsertTeaching(Activity_Login.this, teaching11);
+        TeachingDAO.getInstance(Activity_Login.this).InsertTeaching(Activity_Login.this, teaching12);
 
         // Insert data ACCOUNT
 
@@ -513,5 +459,6 @@ public class Activity_Login extends AppCompatActivity {
         NotificationDAO.getInstance(Activity_Login.this).InsertNotification(Activity_Login.this, notification3);
         NotificationDTO notification4 =  new NotificationDTO(null, "ACC2", "Thông báo học bù", "Lớp CLS3 ọc bù từ ngày 13/4/2024 đến hết ngày 16/4/2024");
         NotificationDAO.getInstance(Activity_Login.this).InsertNotification(Activity_Login.this, notification4);
+        sharedPreferences.edit().putBoolean("insertedData", true).apply();
     }
 }
