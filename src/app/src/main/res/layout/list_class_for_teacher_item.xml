@@ -187,6 +187,12 @@
             android:layout_height="5dp"
             android:background="@drawable/black_line"
             android:layout_marginTop="5dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginStart="80dp">
 
         <Button
             android:id="@+id/viewSchedule"
@@ -198,10 +204,20 @@
             android:textColor="#F3EDED"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="8dp"
             android:layout_marginBottom="5dp"
-            android:layout_gravity="center"
+            android:gravity="center"
             android:textSize="17sp"/>
+            <TextView
+                android:id="@+id/status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="17sp"
+                android:textColor="#36DA55"
+                android:textStyle="bold"
+                android:layout_marginStart="25dp"
+                android:text="Hoàn thành"/>
+        </LinearLayout>
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

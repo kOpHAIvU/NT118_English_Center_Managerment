@@ -1,11 +1,15 @@
 package com.example.app.model;
 
 public class ClassDTO {
+    private int idStatus;
     private String classID, className, startDate, endDate, idProgram, idTeacher, idStaff, status;
+    private String statusDisplay; // Trạng thái hiển thị
+    private String colorResId; // Mã màu trạng thái
 
+    // Constructor
     public ClassDTO(String classID, String className, String startDate,
                     String endDate, String idProgram, String idTeacher,
-                    String idStaff, String status) {
+                    String idStaff, String status, String colorResId) {
         this.classID = classID;
         this.className = className;
         this.startDate = startDate;
@@ -14,6 +18,25 @@ public class ClassDTO {
         this.idTeacher = idTeacher;
         this.idStaff = idStaff;
         this.status = status;
+        this.colorResId = colorResId; // Khởi tạo mã màu trạng thái
+    }
+
+    // Getter và Setter cho colorResId
+    public String getColorResId() {
+        return colorResId;
+    }
+
+    public void setColorResId(String colorResId) {
+        this.colorResId = colorResId;
+    }
+
+    // Getter và Setter cho các thuộc tính khác
+    public int getIdStatus() {
+        return idStatus;
+    }
+
+    public void setIdStatus(int idStatus) {
+        this.idStatus = idStatus;
     }
 
     public String getClassID() {
@@ -80,6 +103,14 @@ public class ClassDTO {
         this.status = status;
     }
 
+    public String getStatusDisplay() {
+        return statusDisplay;
+    }
+
+    public void setStatusDisplay(String statusDisplay) {
+        this.statusDisplay = statusDisplay;
+    }
+
     @Override
     public String toString() {
         return "ClassDTO{" +
@@ -91,6 +122,7 @@ public class ClassDTO {
                 ", idTeacher='" + idTeacher + '\'' +
                 ", idStaff='" + idStaff + '\'' +
                 ", status='" + status + '\'' +
+                ", colorResId='" + colorResId + '\'' + // Thêm colorResId vào toString
                 '}';
     }
 }

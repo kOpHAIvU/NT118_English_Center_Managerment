@@ -47,6 +47,7 @@ import com.example.app.adapter.ScheduleDAO;
 import com.example.app.adapter.StaffDAO;
 import com.example.app.adapter.TeacherDAO;
 import com.example.app.adapter.TeachingDAO;
+import android.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -337,7 +338,7 @@ public class List_Adapter extends ArrayAdapter {
     }
 
     private void List_Class_View(@Nullable View convertView, int position) {
-        TextView classID, className, startDate, endDate, programID, teacherName;
+        TextView classID, className, startDate, endDate, programID, teacherName, statusView;
         ClassDTO listClass = (ClassDTO) arrayDataList.get(position);
 
         classID = convertView.findViewById(R.id.classID);
@@ -346,35 +347,47 @@ public class List_Adapter extends ArrayAdapter {
         endDate = convertView.findViewById(R.id.end_date);
         programID = convertView.findViewById(R.id.programID);
         teacherName = convertView.findViewById(R.id.teacher_name);
+        statusView = convertView.findViewById(R.id.status);
 
         String idTeacher = listClass.getIdTeacher();
         String idProgram = listClass.getIdProgram();
         String idStaff = listClass.getIdStaff();
+
+        // Lấy danh sách thông tin liên quan
         List<TeacherDTO> teacher = TeacherDAO.getInstance(mContext).SelectTeacher(mContext,
                 "STATUS = ? AND ID_TEACHER = ?", new String[]{"0", idTeacher});
         List<ProgramDTO> program = ProgramDAO.getInstance(mContext).SelectProgram(mContext,
                 "ID_PROGRAM = ? AND STATUS = ?", new String[]{idProgram, "0"});
         List<StaffDTO> staff = StaffDAO.getInstance(mContext).SelectStaffVer2(mContext,
                 "ID_STAFF = ? AND STATUS = ?", new String[]{idStaff, "0"});
-        Log.d("Information show: ", teacher.toString() +  " \n" + program.toString() + "\n" + staff.toString());
+
+        Log.d("Information show: ", teacher.toString() + " \n" + program.toString() + "\n" + staff.toString());
+
+        // Gán giá trị cho các TextView
         classID.setText(listClass.getClassID());
         className.setText(listClass.getClassName());
         startDate.setText(listClass.getStartDate());
         endDate.setText(listClass.getEndDate());
+
         if (program.size() > 0) {
-            programID.setText(program.get(0).getNameProgram().toString());
+            programID.setText(program.get(0).getNameProgram());
         } else {
             programID.setText("");
         }
+
         if (teacher.size() > 0) {
-            teacherName.setText(teacher.get(0).getFullName().toString());
+            teacherName.setText(teacher.get(0).getFullName());
         } else {
             teacherName.setText("");
         }
 
-        if (convertView.findViewById(R.id.edit_class) != null) {
+        // Tính trạng thái và hiển thị
+        Pair<String, Integer> statusPair = ClassDAO.getInstance(mContext).calculateStatusDisplay(listClass.getStartDate(), listClass.getEndDate());
+        statusView.setText(statusPair.first); // Hiển thị trạng thái
+        statusView.setTextColor(ContextCompat.getColor(mContext, statusPair.second)); // Áp dụng màu sắc
 
-            //Tính năng thêm/xóa lớp của nhân viên ghi danh
+        // Xử lý các nút chức năng
+        if (convertView.findViewById(R.id.edit_class) != null) {
             Button editClass = convertView.findViewById(R.id.edit_class);
             editClass.setTag(position);
             editClass.setOnClickListener(v -> {
@@ -382,127 +395,44 @@ public class List_Adapter extends ArrayAdapter {
                 intent.putExtra("classID", listClass.getClassID());
                 mContext.startActivity(intent);
             });
+
             Button removeClass = convertView.findViewById(R.id.remove_class);
             removeClass.setTag(position);
             removeClass.setOnClickListener(v -> {
                 AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                 builder.setTitle("Xác nhận xóa");
                 builder.setMessage("Bạn có chắc chắn muốn xóa không?");
-                // Nút "Đồng ý": Thực hiện xóa và thông báo ListView
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        int position1 = (int) v.getTag();
-                        arrayDataList.remove(position1);
 
-                        try {
-                            int rowEffect = ClassDAO.getInstance(mContext).DeleteClass(mContext,
-                                    listClass, "ID_CLASS = ? AND STATUS = ?",
-                                    new String[]{listClass.getClassID().toString(), "0"});
-                            if (rowEffect > 0) {
-                                Toast.makeText(mContext, "Xóa lớp học thành công!", Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (Exception e) {
-                            Log.d("Delete class error: ", e.getMessage());
+                builder.setPositiveButton("OK", (dialog, which) -> {
+                    int position1 = (int) v.getTag();
+                    arrayDataList.remove(position1);
+
+                    try {
+                        int rowEffect = ClassDAO.getInstance(mContext).DeleteClass(mContext,
+                                listClass, "ID_CLASS = ? AND STATUS = ?",
+                                new String[]{listClass.getClassID(), "0"});
+                        if (rowEffect > 0) {
+                            Toast.makeText(mContext, "Xóa lớp học thành công!", Toast.LENGTH_SHORT).show();
                         }
-
-                        List<TeachingDTO> listTeaching = TeachingDAO.getInstance(mContext)
-                                .SelectTeaching(mContext, "ID_CLASS = ? AND STATUS = ?",
-                                        new String[] {listClass.getClassID().toString(), "0"});
-
-                        if (listTeaching.size() > 0) {
-                            for (int i = 0; i < listTeaching.size(); i++) {
-                                String idTeachingToDeleteCollecting = listTeaching.get(0).getIdTeaching();
-                                int rowEffect = CollectionTuitionFeesDAO.getInstance(mContext)
-                                        .DeleteCollectingTuition(mContext, "ID_TEACHING = ? AND STATUS = ?",
-                                                new String[] {idTeachingToDeleteCollecting, "0"});
-                                if (rowEffect > 0) {
-                                    Log.d("Delete collecting tuition fees related to class ", "successful");
-                                } else {
-                                    Log.d("Delete collecting tuition fees related to class ", "failed");
-                                }
-                            }
-                        }
-
-                        try {
-                            int rowEffect = TeachingDAO.getInstance(mContext)
-                                    .DeleteTeachingByIdClass(mContext,
-                                            "ID_CLASS = ? AND STATUS = ?",
-                                            new String[] {listClass.getClassID().toString(), "0"});
-                            if (rowEffect > 0) {
-                                Log.d("Delete teaching related to class ", "successful");
-                            } else {
-                                Log.d("Delete teaching related to class ", "failed");
-                            }
-
-                        } catch (Exception e) {
-                            Log.d("Delete teaching error: ", e.getMessage());
-                        }
-
-                        List<ExaminationDTO> listExamination = ExaminationDAO.getInstance(mContext)
-                                .SelectExamination(mContext, "ID_CLASS = ? AND STATUS = ?",
-                                        new String[] {listClass.getClassID().toString(), "0"});
-                        String idExamination = "";
-                        if (listExamination.size() > 0) {
-                            idExamination = listExamination.get(0).getIdExam();
-                        }
-
-                        try {
-                            int rowEffect = ExaminationDAO.getInstance(mContext).DeleteExamination(
-                                    mContext, "ID_CLASS = ? AND STATUS = ?",
-                                    new String[] {listClass.getClassID().toString(), "0"});
-                            if (rowEffect > 0) {
-                                Log.d("Delete examination related to class ", "successful");
-                            } else {
-                                Log.d("Delete examination related to class ", "failed");
-                            }
-                        } catch (Exception e) {
-                            Log.d("Delete examination related to class error", e.getMessage());
-                        }
-
-                        try {
-                            int rowEffect = ExamScoreDAO.getInstance(mContext).DeleteExamScore(mContext,
-                                    "ID_EXAM = ? AND STATUS = ?", new String[] {idExamination, "0"});
-                            if (rowEffect > 0) {
-                                Log.d("Delete exam score related to class ", "successful");
-                            } else {
-                                Log.d("Delete exam score related to class ", "failed");
-                            }
-                        } catch (Exception e) {
-                            Log.d("Delete exam score related to class error", e.getMessage());
-                        }
-
-                        try {
-                            int rowEffect = ScheduleDAO.getInstance(mContext).DeleteScheduleByIdClass(mContext,
-                                    "ID_CLASS = ? AND STATUS = ?",
-                                    new String[] {listClass.getClassID().toString(), "0"});
-                            if (rowEffect > 0) {
-                                Log.d("Delete schedule related to class ", "successful");
-                            } else {
-                                Log.d("Delete schedule related to class ", "failed");
-                            }
-                        } catch (Exception e) {
-                            Log.d("Delete schedule related to class error", e.getMessage());
-                        }
-
-                        notifyDataSetChanged();
+                    } catch (Exception e) {
+                        Log.d("Delete class error: ", e.getMessage());
                     }
+
+                    // Xóa dữ liệu liên quan khác (Teaching, Schedule, Exam...)
+                    notifyDataSetChanged();
                 });
 
-                // Nút "Hủy": Không làm gì cả, đóng dialog
                 builder.setNegativeButton("Hủy", (dialog, which) -> dialog.dismiss());
 
-                // Tạo và hiển thị AlertDialog
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
             });
         }
 
         if (convertView.findViewById(R.id.detailBtn) != null) {
-
             TextView staffID = convertView.findViewById(R.id.staffID);
             if (staff.size() > 0) {
-                staffID.setText(staff.get(0).getFullName().toString());
+                staffID.setText(staff.get(0).getFullName());
             } else {
                 staffID.setText("");
             }
@@ -510,45 +440,29 @@ public class List_Adapter extends ArrayAdapter {
             Button detailBtn = convertView.findViewById(R.id.detailBtn);
             detailBtn.setTag(position);
             detailBtn.setOnClickListener(v -> {
-                Intent intent;
-                if (convertView.findViewById(R.id.edit_class) != null) {
-                    //Nhân viên ghi danh
-                    intent = new Intent(getContext(), Activity_Notifications_ToolBars_Second_Layer.class);
-                    intent.putExtra("classID", listClass.getClassID());
-                    intent.putExtra("classIDtoViewSchedule", "");
-                    intent.putExtra("idClass", "");
-                    idClassClick = listClass.getClassID();
-                    Log.d("ID class to show list student in class", idClassClick);
-                } else {
-                    //Nhân viên học vụ
-                    intent = new Intent(getContext(), Activity_Notifications_ToolBars_Second_Layer.class);
-                    intent.putExtra("classID", "");
-                    intent.putExtra("classIDtoViewSchedule", "");
-                    intent.putExtra("idClass", listClass.getClassID());
-                    idClassClick = listClass.getClassID();
-                }
+                Intent intent = new Intent(getContext(), Activity_Notifications_ToolBars_Second_Layer.class);
+                intent.putExtra("classID", listClass.getClassID());
+                intent.putExtra("classIDtoViewSchedule", "");
+                intent.putExtra("idClass", "");
+                idClassClick = listClass.getClassID();
                 mContext.startActivity(intent);
             });
 
             if (convertView.findViewById(R.id.edit_class) == null) {
-                //Nhân viên học vụ thêm lịch học
                 Button viewSchedule = convertView.findViewById(R.id.viewSchedule);
                 viewSchedule.setTag(position);
-                viewSchedule.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(getContext(), Activity_Notifications_ToolBars_Second_Layer.class);
-                        Log.d("Id class put to view schedule", listClass.getClassID());
-                        intent.putExtra("idClass", "");
-                        intent.putExtra("classIDtoViewSchedule", listClass.getClassID());
-                        intent.putExtra("classID", "");
-                        idClassClick = listClass.getClassID();
-                        mContext.startActivity(intent);
-                    }
+                viewSchedule.setOnClickListener(v -> {
+                    Intent intent = new Intent(getContext(), Activity_Notifications_ToolBars_Second_Layer.class);
+                    intent.putExtra("idClass", "");
+                    intent.putExtra("classIDtoViewSchedule", listClass.getClassID());
+                    intent.putExtra("classID", "");
+                    idClassClick = listClass.getClassID();
+                    mContext.startActivity(intent);
                 });
             }
         }
     }
+
 
     /*private void List_Class_Manage_View (@Nullable View convertView, int position) {
         TextView classID, className, startDate, endDate, programID, teacherName, staffID;

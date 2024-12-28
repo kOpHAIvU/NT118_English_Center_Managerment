@@ -266,17 +266,17 @@ public class Activity_Login extends AppCompatActivity {
         // Insert data in CLASS
 
         ClassDTO class1 = new ClassDTO(null, "Lớp ielts từ 5-6.5 giúp cải thiện kĩ năng nghe",
-                "22/01/2024", "22/09/2024", "PRO1", "TEA1", "STA2", "0");
+                "22/01/2024", "22/09/2024", "PRO1", "TEA1", "STA2", "0", "#FF5733"); // Thêm màu
         ClassDTO class2 = new ClassDTO(null, "Lớp ielts từ 5-6.5 giúp cải thiện kĩ năng đọc",
-                "22/01/2024", "22/10/2024", "PRO2", "TEA2", "STA1", "0");
+                "22/01/2024", "22/10/2024", "PRO2", "TEA2", "STA1", "0", "#33FF57"); // Thêm màu
         ClassDTO class3 = new ClassDTO(null, "Lớp ielts từ 6-7.5 giúp cải thiện kĩ năng nói",
-                "22/02/2024", "22/12/2024", "PRO3", "TEA1", "STA2", "0");
+                "22/02/2024", "22/12/2024", "PRO3", "TEA1", "STA2", "0", "#3357FF"); // Thêm màu
         ClassDTO class4 = new ClassDTO(null, "Lớp ielts từ 5.5-6.5 giúp cải thiện kĩ năng đọc",
-                "22/03/2024", "22/11/2024", "PRO4", "TEA1", "STA2", "0");
+                "22/03/2024", "22/11/2024", "PRO4", "TEA1", "STA2", "0", "#FF33A1"); // Thêm màu
         ClassDTO class5 = new ClassDTO(null, "Lớp toeic cải thiện kĩ năng nghe 700-990",
-                "22/04/2024", "22/12/2024", "PRO5", "TEA2", "STA1", "0");
+                "22/04/2024", "22/12/2024", "PRO5", "TEA2", "STA1", "0", "#FFD700"); // Thêm màu
         ClassDTO class6 = new ClassDTO(null, "Lớp toeic cải thiện kĩ năng đọc 600-990",
-                "22/04/2024", "22/12/2024", "PRO6", "TEA2", "STA1", "0");
+                "22/04/2024", "22/12/2024", "PRO6", "TEA2", "STA1", "0", "#ADFF2F"); // Thêm màu
         ClassDAO.getInstance(Activity_Login.this).InsertClass(Activity_Login.this, class4);
         ClassDAO.getInstance(Activity_Login.this).InsertClass(Activity_Login.this, class6);
         ClassDAO.getInstance(Activity_Login.this).InsertClass(Activity_Login.this, class5);

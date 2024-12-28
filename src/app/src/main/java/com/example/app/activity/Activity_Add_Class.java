@@ -19,7 +19,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
+
 
 import com.example.app.R;
 import com.example.app.adapter.ClassDAO;
@@ -227,7 +227,8 @@ public class Activity_Add_Class extends AppCompatActivity {
 
                                 ClassDTO classUpdate = new ClassDTO(message, className.getText().toString(),
                                         startDate.getText().toString(), endDate.getText().toString(),
-                                        programSelect.get(0).getIdProgram(), teacher.get(0).getIdTeacher(), staff.get(0).getIdStaff(), "0");
+                                        programSelect.get(0).getIdProgram(), teacher.get(0).getIdTeacher(), staff.get(0).getIdStaff(), "0","desiredColor");
+
 
                                 try {
                                     int rowEffect = ClassDAO.getInstance(Activity_Add_Class.this).UpdateClass(
@@ -339,10 +340,10 @@ public class Activity_Add_Class extends AppCompatActivity {
                             return;
                         }
 
-                        ClassDTO classNew = new ClassDTO(message, className.getText().toString(),
+                        ClassDTO classNew = new ClassDTO(null, className.getText().toString(),
                                 startDate.getText().toString(), endDate.getText().toString(),
                                 programSelect.get(0).getIdProgram(), teacher.get(0).getIdTeacher(),
-                                staff.get(0).getIdStaff(), "0");
+                                staff.get(0).getIdStaff(), "0", "desiredColor"); // Thêm tham số color
 
                         try {
                             int rowEffect = ClassDAO.getInstance(Activity_Add_Class.this).InsertClass(
