@@ -132,6 +132,7 @@ public class DataProvider extends SQLiteOpenHelper {
                     "ID_TEACHER TEXT, " +
                     "ID_STAFF TEXT, " +
                     "STATUS INTEGER," +
+                    "COLOR_RES_ID TEXT," +
                     "FOREIGN KEY (ID_PROGRAM) REFERENCES PROGRAM(ID_PROGRAM)," +
                     "FOREIGN KEY (ID_STAFF) REFERENCES STAFF(ID_STAFF)," +
                     "FOREIGN KEY (ID_TEACHER) REFERENCES TEACHER(ID_TEACHER))");
