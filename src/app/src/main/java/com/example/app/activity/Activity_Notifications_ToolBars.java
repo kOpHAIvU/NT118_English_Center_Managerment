@@ -129,8 +129,7 @@ public class Activity_Notifications_ToolBars extends AppCompatActivity {
                 break;
             case "Quản lý lớp học":
                 toolbar.setTitle("Lớp học");
-                /*dataArrayList.add(new ClassDTO("IS201","Môn gì đó",
-                        "Đại học", "Tuyết Loan",
+                /*dataAn ly "Đại học", "Tuyết Loan",
                         "10 buổi", "10.000.000",
                         "Hehe","Đoán coi"));*/
 

@@ -45,7 +45,6 @@ public class Fragment_Information extends Fragment implements AdapterView.OnItem
                 dataArrayList.add(new List_Information("Xem chứng chỉ", R.drawable.chuong_trinh_dt));
                 dataArrayList.add(new List_Information("Thông báo hệ thống", R.drawable.tb_he_thong));
                 dataArrayList.add(new List_Information("Xem các lớp học", R.drawable.lophoc));
-                dataArrayList.add(new List_Information("Thông tin lớp học", R.drawable.local_library_24px));
                 dataArrayList.add(new List_Information("Lịch học", R.drawable.baseline_schedule_24));
             } else if (type == 2) {
                 //Nhân viên ghi danh
