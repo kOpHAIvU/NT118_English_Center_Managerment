@@ -92,11 +92,14 @@ public class Activity_Add_Class extends AppCompatActivity {
                 dialog.show();
             }
         });
+
         startDt = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                month++;
-                startDate.setText(dayOfMonth + "/" + month + "/" + year);
+                month++; // Tháng bắt đầu từ 0
+                String formattedDay = String.format("%02d", dayOfMonth); // Định dạng ngày
+                String formattedMonth = String.format("%02d", month); // Định dạng tháng
+                startDate.setText(formattedDay + "/" + formattedMonth + "/" + year);
             }
         };
 
@@ -118,11 +121,14 @@ public class Activity_Add_Class extends AppCompatActivity {
                 dialog.show();
             }
         });
+
         endDt = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                month++;
-                endDate.setText(dayOfMonth + "/" + month + "/" + year);
+                month++; // Tháng bắt đầu từ 0
+                String formattedDay = String.format("%02d", dayOfMonth); // Định dạng ngày
+                String formattedMonth = String.format("%02d", month); // Định dạng tháng
+                endDate.setText(formattedDay + "/" + formattedMonth + "/" + year);
             }
         };
 

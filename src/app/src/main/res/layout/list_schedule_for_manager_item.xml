@@ -94,7 +94,26 @@
                 android:id="@+id/idClassroom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Thứ 8"
+                android:text="B1.13"
+                android:textSize="17sp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sức chứa: "
+                android:textStyle="bold"
+                android:textSize="17sp"/>
+            <TextView
+                android:id="@+id/capacity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="80"
                 android:textSize="17sp"/>
         </LinearLayout>
 

@@ -238,11 +238,11 @@ public class Activity_Login extends AppCompatActivity {
 
         // Insert data in CLASSROOM
 
-        ClassroomDTO classroom1 = new ClassroomDTO(null, "B1.11");
-        ClassroomDTO classroom2 = new ClassroomDTO(null, "B1.12");
-        ClassroomDTO classroom3 = new ClassroomDTO(null, "B1.13");
-        ClassroomDTO classroom4 = new ClassroomDTO(null, "B1.14");
-        ClassroomDTO classroom5 = new ClassroomDTO(null, "B1.15");
+        ClassroomDTO classroom1 = new ClassroomDTO(null, "B1.11", 30);
+        ClassroomDTO classroom2 = new ClassroomDTO(null, "B1.12", 60);
+        ClassroomDTO classroom3 = new ClassroomDTO(null, "B1.13", 70);
+        ClassroomDTO classroom4 = new ClassroomDTO(null, "B1.14", 35);
+        ClassroomDTO classroom5 = new ClassroomDTO(null, "B1.15", 40);
         ClassroomDAO.getInstance(Activity_Login.this).InsertNewClassroom(Activity_Login.this, classroom1);
         ClassroomDAO.getInstance(Activity_Login.this).InsertNewClassroom(Activity_Login.this, classroom2);
         ClassroomDAO.getInstance(Activity_Login.this).InsertNewClassroom(Activity_Login.this, classroom3);

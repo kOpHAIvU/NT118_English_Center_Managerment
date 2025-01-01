@@ -74,10 +74,11 @@ public class DataProvider extends SQLiteOpenHelper {
             db.execSQL("CREATE TABLE IF NOT EXISTS CLASSROOM (" +
                     "ID_CLASSROOM TEXT PRIMARY KEY, " +
                     "NAME TEXT, " +
-                    "STATUS INTEGER)");
-            Log.d("CREATE EXAMINATION", "Database created successfully");
-        } catch ( Exception e) {
-            Log.d("CREATE EXAMINATION",  e.getMessage());
+                    "STATUS INTEGER, " +
+                    "CAPACITY INTEGER)"); // Thêm trường sức chứa
+            Log.d("CREATE CLASSROOM", "Database created successfully");
+        } catch (Exception e) {
+            Log.d("CREATE CLASSROOM", e.getMessage());
         }
 
         try {
@@ -400,11 +401,12 @@ public class DataProvider extends SQLiteOpenHelper {
         db.insert("TEACHERS", null, contentValues);
     }
 
-    private void insertClassroom(SQLiteDatabase db, String name, int status, int index) {
+    private void insertClassroom(SQLiteDatabase db, String name, int status, int index, int capacity) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("ID_CLASSROOM", "CLA" + index);  // ID with "CLA" + index
         contentValues.put("NAME", name);
         contentValues.put("STATUS", status);
+        contentValues.put("CAPACITY", capacity); // Thêm sức chứa vào ContentValues
 
         // Inserting the classroom data
         db.insert("CLASSROOM", null, contentValues);

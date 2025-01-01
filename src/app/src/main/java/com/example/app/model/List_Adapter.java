@@ -692,39 +692,46 @@ public class List_Adapter extends ArrayAdapter {
     }
 
     private void Schedule_View(@Nullable View convertView, int position) {
-        TextView dayOfWeek, idClass, idClassroom, time;
+        TextView dayOfWeek, idClass, idClassroom, time, capacity; // Thêm capacity cho sức chứa
         dayOfWeek = convertView.findViewById(R.id.day_of_week);
         idClass = convertView.findViewById(R.id.idClass);
         idClassroom = convertView.findViewById(R.id.idClassroom);
         time = convertView.findViewById(R.id.time);
+        capacity = convertView.findViewById(R.id.capacity); // Khởi tạo TextView cho sức chứa
 
         ScheduleDTO listSchedule = (ScheduleDTO) arrayDataList.get(position);
 
-        if (Integer.parseInt(listSchedule.getDayOfWeek().toString()) > 7) {
+        if (Integer.parseInt(listSchedule.getDayOfWeek()) > 7) {
             dayOfWeek.setText("Chủ nhật");
         } else {
             dayOfWeek.setText("Thứ " + listSchedule.getDayOfWeek());
         }
 
-        time.setText(listSchedule.getStartTime() + "h00 - " +listSchedule.getEndTime() + "h00" );
+        time.setText(listSchedule.getStartTime() + "h00 - " + listSchedule.getEndTime() + "h00");
 
         List<ClassDTO> listClass = ClassDAO.getInstance(getContext()).selectClass(getContext(),
                 "ID_CLASS= ?", new String[]{listSchedule.getIdClass()});
 
-        /*List<TeacherDTO> listTeacher = TeacherDAO.getInstance(mContext)
-                .SelectTeacher(mContext, "ID_TEACHER = ? AND STATUS = ?",
-                        new String[] {listClass.getIdTeacher})*/
+        // Lấy danh sách lớp học
+        List<ClassroomDTO> listClassroom = ClassroomDAO.getInstance(getContext()).SelectClassroom(
+                getContext(), "ID_CLASSROOM = ?", new String[]{listSchedule.getIdClassroom()});
+
+        // Kiểm tra nếu có lớp học và thiết lập thông tin
+        if (!listClass.isEmpty()) {
+            idClass.setText(listClass.get(0).getClassName());
+        }
+
+        if (!listClassroom.isEmpty()) {
+            idClassroom.setText(listClassroom.get(0).getName());
+            capacity.setText(String.valueOf(listClassroom.get(0).getCapacity()));
+        }
 
         if (convertView.findViewById(R.id.teacherName) != null) {
             TextView teacherName = convertView.findViewById(R.id.teacherName);
             teacherName.setText("1");
         }
-        List<ClassroomDTO> listClassroom = ClassroomDAO.getInstance(getContext()).SelectClassroom(
-                getContext(), "ID_CLASSROOM = ?", new String[]{listSchedule.idClassroom});
 
-        idClass.setText(listClass.get(0).getClassName());
-        idClassroom.setText(listClassroom.get(0).getName());
-
+        // Thiết lập sự kiện cho nút chỉnh sửa lịch
         if (convertView.findViewById(R.id.edit_schedule) != null) {
             Button editSchedule, removeSchedule;
             editSchedule = convertView.findViewById(R.id.edit_schedule);
@@ -736,13 +743,13 @@ public class List_Adapter extends ArrayAdapter {
                 mContext.startActivity(intent);
             });
 
+            // Thiết lập sự kiện cho nút xóa lịch
             removeSchedule = convertView.findViewById(R.id.remove_schedule);
             removeSchedule.setTag(position);
             removeSchedule.setOnClickListener(v -> {
                 AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                 builder.setTitle("Xác nhận xóa");
                 builder.setMessage("Bạn có chắc chắn muốn xóa không?");
-                // Nút "Đồng ý": Thực hiện xóa và thông báo ListView
                 builder.setPositiveButton("Đồng ý", (dialog, which) -> {
                     int position1 = (int) v.getTag();
                     arrayDataList.remove(position1);
@@ -751,25 +758,18 @@ public class List_Adapter extends ArrayAdapter {
                     try {
                         ScheduleDTO scheduleDelete = new ScheduleDTO(listSchedule.getIdSchedule(),
                                 null, null, null, null, null);
-                        try {
-                            int rowEffect = ScheduleDAO.getInstance(mContext).DeleteSchedule(
-                                    mContext, scheduleDelete,
-                                    "ID_SCHEDULE = ? AND STATUS = ?",
-                                    new String[]{scheduleDelete.getIdSchedule(), "0"});
-                            if (rowEffect > 0) {
-                                Toast.makeText(mContext, "Xóa lịch học thành công",
-                                        Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(mContext, "Xóa lịch học thất bại",
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (Exception e) {
-                            Log.d("Delete schedule error: ", e.getMessage());
+                        int rowEffect = ScheduleDAO.getInstance(mContext).DeleteSchedule(
+                                mContext, scheduleDelete,
+                                "ID_SCHEDULE = ? AND STATUS = ?",
+                                new String[]{scheduleDelete.getIdSchedule(), "0"});
+                        if (rowEffect > 0) {
+                            Toast.makeText(mContext, "Xóa lịch học thành công", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(mContext, "Xóa lịch học thất bại", Toast.LENGTH_SHORT).show();
                         }
                     } catch (Exception e) {
                         Log.d("Delete schedule error: ", e.getMessage());
                     }
-
                 });
 
                 // Nút "Hủy": Không làm gì cả, đóng dialog
