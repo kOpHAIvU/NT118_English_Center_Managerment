@@ -430,34 +430,55 @@ public class List_Adapter extends ArrayAdapter {
         }
 
         if (convertView.findViewById(R.id.detailBtn) != null) {
+
             TextView staffID = convertView.findViewById(R.id.staffID);
             if (staff.size() > 0) {
-                staffID.setText(staff.get(0).getFullName());
+                staffID.setText(staff.get(0).getFullName().toString());
             } else {
                 staffID.setText("");
             }
 
             Button detailBtn = convertView.findViewById(R.id.detailBtn);
             detailBtn.setTag(position);
-            detailBtn.setOnClickListener(v -> {
-                Intent intent = new Intent(getContext(), Activity_Notifications_ToolBars_Second_Layer.class);
-                intent.putExtra("classID", listClass.getClassID());
-                intent.putExtra("classIDtoViewSchedule", "");
-                intent.putExtra("idClass", "");
-                idClassClick = listClass.getClassID();
-                mContext.startActivity(intent);
+            detailBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent;
+                    if (convertView.findViewById(R.id.edit_class) != null) {
+                        //Nhân viên ghi danh
+                        intent = new Intent(getContext(), Activity_Notifications_ToolBars_Second_Layer.class);
+                        intent.putExtra("classID", listClass.getClassID());
+                        intent.putExtra("classIDtoViewSchedule", "");
+                        intent.putExtra("idClass", "");
+                        idClassClick = listClass.getClassID();
+                        Log.d("ID class to show list student in class", idClassClick);
+                    } else {
+                        //Nhân viên học vụ
+                        intent = new Intent(getContext(), Activity_Notifications_ToolBars_Second_Layer.class);
+                        intent.putExtra("classID", "");
+                        intent.putExtra("classIDtoViewSchedule", "");
+                        intent.putExtra("idClass", listClass.getClassID());
+                        idClassClick = listClass.getClassID();
+                    }
+                    mContext.startActivity(intent);
+                }
             });
 
             if (convertView.findViewById(R.id.edit_class) == null) {
+                //Nhân viên học vụ thêm lịch học
                 Button viewSchedule = convertView.findViewById(R.id.viewSchedule);
                 viewSchedule.setTag(position);
-                viewSchedule.setOnClickListener(v -> {
-                    Intent intent = new Intent(getContext(), Activity_Notifications_ToolBars_Second_Layer.class);
-                    intent.putExtra("idClass", "");
-                    intent.putExtra("classIDtoViewSchedule", listClass.getClassID());
-                    intent.putExtra("classID", "");
-                    idClassClick = listClass.getClassID();
-                    mContext.startActivity(intent);
+                viewSchedule.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getContext(), Activity_Notifications_ToolBars_Second_Layer.class);
+                        Log.d("Id class put to view schedule", listClass.getClassID());
+                        intent.putExtra("idClass", "");
+                        intent.putExtra("classIDtoViewSchedule", listClass.getClassID());
+                        intent.putExtra("classID", "");
+                        idClassClick = listClass.getClassID();
+                        mContext.startActivity(intent);
+                    }
                 });
             }
         }

@@ -39,7 +39,7 @@ public class Fragment_Information extends Fragment implements AdapterView.OnItem
             int type = AccountDAO.getInstance(getContext()).GetObjectLogin(getContext(),
                     Activity_Login.username, Activity_Login.password);
 
-            dataArrayList.add(new List_Information("Tra cứu chương trình đào tạo", R.drawable.history_edu_24px));
+            //dataArrayList.add(new List_Information("Tra cứu chương trình đào tạo", R.drawable.score_icon));
 
             if (type == 1)  {
                 //Học viên
