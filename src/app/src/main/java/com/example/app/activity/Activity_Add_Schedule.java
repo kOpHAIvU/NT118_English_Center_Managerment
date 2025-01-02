@@ -40,10 +40,11 @@ public class Activity_Add_Schedule extends AppCompatActivity {
     Button doneBtn, exitBtn;
     String[] dayOfWeekItem = {"Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ nhật"};
     String[] classTimeItem = {"7h00 - 9h00", "9h00 - 11h00", "13h00 - 15h00", "15h00 - 17h00", "17h00 - 19h00", "19h00 - 21h00"};
+    String[] capacityItems = {"30", "60", "70", "90", "120"};
     ArrayList<String> idClassroomItem = new ArrayList<>();
-    AutoCompleteTextView dayOfWeek, classTime, idClassroom;
-    ArrayAdapter<String> dayOfWeekAdapter, classTimeAdapter, idClassroomAdapter;
-    String dayOfWeekText, classTimeText, idClassroomText;
+    AutoCompleteTextView dayOfWeek, classTime, idClassroom, capacity;
+    ArrayAdapter<String> dayOfWeekAdapter, classTimeAdapter, idClassroomAdapter, capacityAdapter;
+    String dayOfWeekText, classTimeText, idClassroomText,capacityText;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -55,6 +56,7 @@ public class Activity_Add_Schedule extends AppCompatActivity {
         dayOfWeek = findViewById(R.id.dayOfWeek);
         idClassroom = findViewById(R.id.idClassroom);
         classTime = findViewById(R.id.classTime);
+        capacity = findViewById(R.id.capacity);
         doneBtn = findViewById(R.id.done_btn);
         exitBtn = findViewById(R.id.exit_btn);
 
@@ -72,6 +74,13 @@ public class Activity_Add_Schedule extends AppCompatActivity {
         classTime.setOnItemClickListener((parent, view, position, id) -> {
             classTimeText = parent.getItemAtPosition(position).toString();
             Log.d("Class time: ", classTimeText);
+        });
+
+        capacityAdapter = new ArrayAdapter<>(this, R.layout.combobox_item, capacityItems);
+        capacity.setAdapter(capacityAdapter);
+        capacity.setOnItemClickListener((parent, view, position, id) -> {
+            capacityText = parent.getItemAtPosition(position).toString();
+            Log.d("Capacity: ", capacityText);
         });
 
         List<ClassroomDTO> listClassroom = ClassroomDAO.getInstance(Activity_Add_Schedule.this)

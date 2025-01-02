@@ -181,7 +181,7 @@
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
                         <AutoCompleteTextView
                             android:layout_gravity="center_vertical"
-                            android:id="@+id/idTotal"
+                            android:id="@+id/capacity"
                             android:padding="8dp"
                             android:layout_width="100dp"
                             android:layout_height="wrap_content"
