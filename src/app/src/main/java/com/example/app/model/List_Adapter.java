@@ -680,14 +680,11 @@ public class List_Adapter extends ArrayAdapter {
 
         editOfficialStudent = convertView.findViewById(R.id.edit_student);
         editOfficialStudent.setTag(position);
-        editOfficialStudent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent addPotential = new Intent(getContext(), Activity_Add_Official_Student.class);
-                addPotential.putExtra("studentID", officialStudentDTO.getIdStudent().toString());
-                addPotential.putExtra("classID", idClassClick.toString());
-                mContext.startActivity(addPotential);
-            }
+        editOfficialStudent.setOnClickListener(v -> {
+            Intent editOfficial = new Intent(getContext(), Activity_Add_Official_Student.class);
+            editOfficial.putExtra("studentID", officialStudentDTO.getIdStudent().toString());
+            editOfficial.putExtra("classID", idClassClick.toString());
+            mContext.startActivity(editOfficial);
         });
     }
 

@@ -203,13 +203,13 @@ public class Activity_Login extends AppCompatActivity {
         CertificateDAO.getInstance(Activity_Login.this).InsertCertificate(Activity_Login.this, certificate2);
 
         // Program
-        ProgramDTO program1 = new ProgramDTO(null, "Chứng chỉ ielts academic",
-                "5.0", "6.5", "Cải thiện khả năng nghe",
-                "5.5", "6.5", "7.0", "7.0",
-                3000000, "6 tháng", "CER1");
-        ProgramDTO program2 = new ProgramDTO(null, "Chứng chỉ ielts academic",
-                "5.0", "6.5", "Cải thiện khả năng nói",
-                "6.5", "6.5", "7.0", "7.0",
+        ProgramDTO program1 = new ProgramDTO(null, "Chứng chỉ toeic 500-880",
+                "400", "600", "Cải thiện khả năng nghe",
+                "80", "70", "380", "400",
+                5000000, "6 tháng", "CER1");
+        ProgramDTO program2 = new ProgramDTO(null, "Chứng chỉ toeic 500-700",
+                "400", "650", "Cải thiện khả năng nói",
+                "85", "75", "385", "400",
                 10000000, "6 tháng", "CER1");
 
         ProgramDTO program3 = new ProgramDTO(null, "Chứng chỉ ielts general",
@@ -221,14 +221,15 @@ public class Activity_Login extends AppCompatActivity {
                 "6.5", "6.5", "7.0", "7.0",
                 10000000, "6 tháng", "CER2");
 
-        ProgramDTO program5 = new ProgramDTO(null, "Chứng chỉ toeic 500-880",
+        ProgramDTO program5 = new ProgramDTO(null, "Chứng chỉ ielts academic",
                 "5.0", "6.5", "Cải thiện khả năng nghe",
                 "5.5", "6.5", "7.0", "7.0",
-                5000000, "6 tháng", "CER3");
-        ProgramDTO program6 = new ProgramDTO(null, "Chứng chỉ toeic 500-700",
+                3000000, "6 tháng", "CER3");
+        ProgramDTO program6 = new ProgramDTO(null, "Chứng chỉ ielts academic",
                 "5.0", "6.5", "Cải thiện khả năng nói",
                 "6.5", "6.5", "7.0", "7.0",
                 10000000, "6 tháng", "CER3");
+
         ProgramDAO.getInstance(Activity_Login.this).InsertProgram(Activity_Login.this, program1);
         ProgramDAO.getInstance(Activity_Login.this).InsertProgram(Activity_Login.this, program2);
         ProgramDAO.getInstance(Activity_Login.this).InsertProgram(Activity_Login.this, program3);

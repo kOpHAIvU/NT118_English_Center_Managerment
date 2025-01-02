@@ -72,7 +72,7 @@ public class OfficialStudentDAO {
         return rowEffect;
     }
 
-    public int updateOfficialStudent(Context context, OfficialStudentDTO student, String whereClause, String[] whereArgs) {
+        public int updateOfficialStudent(Context context, OfficialStudentDTO student, String whereClause, String[] whereArgs) {
         String idStudent = student.getIdStudent();
         String fullName = student.getFullName();
         String address = student.getAddress();

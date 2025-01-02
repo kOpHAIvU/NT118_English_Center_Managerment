@@ -109,7 +109,7 @@
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
                 android:textSize="15sp"
-                android:text="Phái: "/>
+                android:text="Giới tính: "/>
             <TextView
                 android:id="@+id/gender"
                 android:layout_width="wrap_content"

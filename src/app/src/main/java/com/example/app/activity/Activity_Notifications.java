@@ -128,29 +128,31 @@ public class Activity_Notifications extends AppCompatActivity {
                 break;
 
             case "Xem các lớp học":
-                /*dataArrayList.add(new ClassDTO("IS201","Môn gì đó",
-                        "Đại học", "Tuyết Loan",
-                        "10 buổi", "10.000.000",
-                        "Hehe","Đoán coi"));*/
-               /* dataArrayList.add(new ClassDTO("IS201","Môn gì đó",
-                        "Đại học", "Tuyết Loan",
-                        "10 buổi", "10.000.000",
-                        "Hehe","Đoán coi"));
-                dataArrayList.add(new ClassDTO("IS201","Môn gì đó",
-                        "Đại học", "Tuyết Loan",
-                        "10 buổi", "10.000.000",
-                        "Hehe","Đoán coi"));
-                        */
-                //dataArrayList.add(new ClassroomDTO("1","1"));
                 int typeClass = AccountDAO.getInstance(Activity_Notifications.this).GetObjectLogin(Activity_Notifications.this,
                         Activity_Login.username, Activity_Login.password);
+
                 List<ClassDTO> listClass = ClassDAO.getInstance(
                         Activity_Notifications.this).SelectClassByIdUser(Activity_Notifications.this,
                         Activity_Login.idUser, typeClass);
-                for (int i = 0; i < listClass.size(); i++) {
-                    dataArrayList.add(listClass.get(i));
+
+                // Xóa dữ liệu cũ trong dataArrayList
+                dataArrayList.clear();
+
+                // Thêm lớp học vào dataArrayList
+                for (ClassDTO classDTO : listClass) {
+                    dataArrayList.add(classDTO);
                 }
-                listAdapter = new List_Adapter(Activity_Notifications.this, R.layout.list_class_for_teacher_item, dataArrayList);
+
+                // Chọn layout dựa trên idUser
+                int layoutResource;
+                if (Activity_Login.idUser.startsWith("STU")) {
+                    layoutResource = R.layout.list_class_for_student_item; // Layout cho học viên
+                } else {
+                    layoutResource = R.layout.list_class_for_teacher_item; // Layout cho giáo viên
+                }
+
+                // Tạo adapter với layout tương ứng
+                listAdapter = new List_Adapter(Activity_Notifications.this, layoutResource, dataArrayList);
                 break;
 
             case "Xem chứng chỉ":
