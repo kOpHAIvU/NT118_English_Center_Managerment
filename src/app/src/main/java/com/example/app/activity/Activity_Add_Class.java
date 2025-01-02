@@ -2,9 +2,8 @@ package com.example.app.activity;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
+import com.google.android.material.datepicker.MaterialDatePicker;
 import android.app.DatePickerDialog;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -20,17 +19,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.example.app.R;
 import com.example.app.adapter.ClassDAO;
-import com.example.app.adapter.ClassroomDAO;
-import com.example.app.adapter.ExaminationDAO;
 import com.example.app.adapter.ProgramDAO;
 import com.example.app.adapter.StaffDAO;
 import com.example.app.adapter.TeacherDAO;
 import com.example.app.model.ClassDTO;
-import com.example.app.model.ClassroomDTO;
-import com.example.app.model.ExaminationDTO;
 import com.example.app.model.ProgramDTO;
 import com.example.app.model.StaffDTO;
 import com.example.app.model.TeacherDTO;
@@ -46,7 +40,7 @@ public class Activity_Add_Class extends AppCompatActivity {
     Button exitBtn, doneBtn;
     String[] programIDItem;
     AutoCompleteTextView program;
-    ArrayAdapter<String> roomAdapter, programAdapter;
+    ArrayAdapter<String> programAdapter;
     DatePickerDialog.OnDateSetListener startDt, endDt;
 
     @Override
@@ -57,82 +51,32 @@ public class Activity_Add_Class extends AppCompatActivity {
         String message = getIntent().getStringExtra("classID");
 
         List<ProgramDTO> listProgramAdapter = ProgramDAO.getInstance(Activity_Add_Class.this)
-                .SelectProgram(Activity_Add_Class.this, "STATUS = ?",
-                        new String[] {"0"});
+                .SelectProgram(Activity_Add_Class.this, "STATUS = ?", new String[] {"0"});
         programIDItem = new String[listProgramAdapter.size()];
         for (int i = 0; i < listProgramAdapter.size(); i++) {
             programIDItem[i] = listProgramAdapter.get(i).getNameProgram();
         }
 
         program = findViewById(R.id.programID);
-        programAdapter = new ArrayAdapter<String>(this, R.layout.combobox_item, programIDItem);
+        programAdapter = new ArrayAdapter<>(this, R.layout.combobox_item, programIDItem);
         program.setAdapter(programAdapter);
-        program.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String item = parent.getItemAtPosition(position).toString();
-            }
-        });
 
         startDate = findViewById(R.id.start_date);
-        startDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Calendar cal = Calendar.getInstance();
-                int year = cal.get(Calendar.YEAR);
-                int month = cal.get(Calendar.MONTH);
-                int day = cal.get(Calendar.DAY_OF_MONTH);
+        startDate.setOnClickListener(v -> showDatePicker(true));
 
-                DatePickerDialog dialog = new DatePickerDialog(
-                        Activity_Add_Class.this,
-                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-                        startDt,
-                        year, month, day);
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.show();
-            }
-        });
-
-        startDt = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                month++; // Tháng bắt đầu từ 0
-                String formattedDay = String.format("%02d", dayOfMonth); // Định dạng ngày
-                String formattedMonth = String.format("%02d", month); // Định dạng tháng
-                startDate.setText(formattedDay + "/" + formattedMonth + "/" + year);
-            }
+        startDt = (view, year, month, dayOfMonth) -> {
+            month++; // Tháng bắt đầu từ 0
+            startDate.setText(String.format("%02d/%02d/%d", dayOfMonth, month, year));
         };
 
         endDate = findViewById(R.id.end_date);
-        endDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Calendar cal = Calendar.getInstance();
-                int year = cal.get(Calendar.YEAR);
-                int month = cal.get(Calendar.MONTH);
-                int day = cal.get(Calendar.DAY_OF_MONTH);
+        endDate.setOnClickListener(v -> showDatePicker(false));
 
-                DatePickerDialog dialog = new DatePickerDialog(
-                        Activity_Add_Class.this,
-                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-                        endDt,
-                        year, month, day);
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.show();
-            }
-        });
-
-        endDt = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                month++; // Tháng bắt đầu từ 0
-                String formattedDay = String.format("%02d", dayOfMonth); // Định dạng ngày
-                String formattedMonth = String.format("%02d", month); // Định dạng tháng
-                endDate.setText(formattedDay + "/" + formattedMonth + "/" + year);
-            }
+        endDt = (view, year, month, dayOfMonth) -> {
+            month++; // Tháng bắt đầu từ 0
+            endDate.setText(String.format("%02d/%02d/%d", dayOfMonth, month, year));
         };
 
-      //  classID = findViewById(R.id.classID);
         className = findViewById(R.id.class_name);
         idTeacher = findViewById(R.id.idTeacher);
         staffID = findViewById(R.id.staffID);
@@ -140,263 +84,177 @@ public class Activity_Add_Class extends AppCompatActivity {
         doneBtn = findViewById(R.id.done_btn);
 
         List<ClassDTO> listClass = ClassDAO.getInstance(Activity_Add_Class.this).selectClass(
-                Activity_Add_Class.this, "ID_CLASS = ? AND STATUS = ?",
-                new String[] {message, "0"});
+                Activity_Add_Class.this, "ID_CLASS = ? AND STATUS = ?", new String[] {message, "0"});
+
         if (!message.equals("")) {
-
-            Log.d("Id class send", listClass.get(0).toString());
-
-            className.setText(listClass.get(0).getClassName());
-            startDate.setText(listClass.get(0).getStartDate());
-            endDate.setText(listClass.get(0).getEndDate());
-
-            String idProgramText = listClass.get(0).getIdProgram();
-            List<ProgramDTO> programArr = ProgramDAO.getInstance(Activity_Add_Class.this).SelectProgram(
-                    Activity_Add_Class.this, "ID_PROGRAM = ? AND STATUS = ?",
-                    new String[] {idProgramText, "0"});
-            String idTeacherText = listClass.get(0).getIdTeacher();
-            List<TeacherDTO> teacherArr = TeacherDAO.getInstance(Activity_Add_Class.this).SelectTeacher(
-                    Activity_Add_Class.this, "ID_TEACHER = ? AND STATUS = ?",
-                    new String[] {idTeacherText, "0"});
-            String idStaff = listClass.get(0).getIdStaff();
-            List<StaffDTO> staffArr = StaffDAO.getInstance(Activity_Add_Class.this).SelectStaffVer2(
-                    Activity_Add_Class.this, "ID_STAFF = ? AND STATUS = ?",
-                    new String[] {idStaff, "0"});
-
-            /*programID.setText(program.get(0).getNameProgram().toString());
-            teacherName.setText(teacher.get(0).getFullName().toString());*/
-            staffID.setText(staffArr.get(0).getFullName().toString());
-            idTeacher.setText(teacherArr.get(0).getFullName());
-            program.setText(programArr.get(0).getNameProgram());
-            // toolbar.setTitle(className.getText().toString()  + classID.getText().toString());
-
-
-            doneBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (className.getText().toString().equals("")
-                            || startDate.getText().toString().equals("") || endDate.getText().toString().equals("")
-                            || staffID.getText().toString().equals("") || program.getText().toString().equals("")
-                            || idTeacher.getText().toString().equals("")) {
-                        Toast.makeText(Activity_Add_Class.this, "Hãy nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
-                    } else {
-
-                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy");
-
-                        LocalDate date1 = LocalDate.parse(startDate.getText().toString(), formatter);
-                        LocalDate date2 = LocalDate.parse(endDate.getText().toString(), formatter);
-                        if (date1.isAfter(date2)) {
-                            Toast.makeText(Activity_Add_Class.this, "Ngày kết thúc lớp học " +
-                                    "phải sau ngày bắt đầu!", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-
-                        AlertDialog.Builder builder = new AlertDialog.Builder(Activity_Add_Class.this);
-                        builder.setTitle("Xác nhận")
-                                .setMessage("Bạn có chắc chắn muốn sửa thông tin lớp học này không?");
-                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-
-                                List<ProgramDTO> programSelect = ProgramDAO.getInstance(Activity_Add_Class.this).SelectProgram(
-                                        Activity_Add_Class.this, "NAME = ? AND STATUS = ?",
-                                        new String[] {program.getText().toString(), "0"});
-                                List<TeacherDTO> teacher = TeacherDAO.getInstance(Activity_Add_Class.this).SelectTeacher(
-                                        Activity_Add_Class.this, "FULLNAME = ? AND STATUS = ?",
-                                        new String[] {idTeacher.getText().toString(), "0"});
-                                List<StaffDTO> staff = StaffDAO.getInstance(Activity_Add_Class.this).SelectStaffVer2(
-                                        Activity_Add_Class.this, "FULLNAME = ? AND STATUS = ?",
-                                        new String[] {staffID.getText().toString(), "0"});
-
-                                String errorMessage1 = "";
-                                String errorMessage2 = "";
-                                boolean flag = true;
-                                if (teacher.size() <= 0) {
-                                    errorMessage1 = "sai tên giảng viên";
-                                    flag = false;
-                                }
-                                if (staff.size() <= 0 )  {
-                                    errorMessage2 = "sai tên nhân viên quản lý";
-                                    flag = false;
-                                }
-
-                                if (!flag && !errorMessage1.equals("") && !errorMessage2.equals("")) {
-                                    Toast.makeText(Activity_Add_Class.this, "Bạn đã nhập " +
-                                            errorMessage1 + " và " + errorMessage2, Toast.LENGTH_SHORT).show();
-                                    return;
-                                }
-
-                                if (!flag) {
-                                    Toast.makeText(Activity_Add_Class.this, "Bạn đã nhập " +
-                                            errorMessage1 + errorMessage2, Toast.LENGTH_SHORT).show();
-                                    return;
-                                }
-
-                                ClassDTO classUpdate = new ClassDTO(message, className.getText().toString(),
-                                        startDate.getText().toString(), endDate.getText().toString(),
-                                        programSelect.get(0).getIdProgram(), teacher.get(0).getIdTeacher(), staff.get(0).getIdStaff(), "0","desiredColor");
-
-
-                                try {
-                                    int rowEffect = ClassDAO.getInstance(Activity_Add_Class.this).UpdateClass(
-                                            Activity_Add_Class.this, classUpdate,"ID_CLASS = ? AND STATUS = ?",
-                                            new String[] {message, "0"});
-                                    if (rowEffect > 0) {
-                                        Toast.makeText(Activity_Add_Class.this, "Sửa thông tin lớp học thành công",
-                                                Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        Log.d("Update class failed", "failed");
-                                    }
-                                } catch ( Exception e) {
-                                    Log.d("Update class error: ", e.getMessage());
-                                }
-                            }
-                        });
-                        builder.setNegativeButton("Hủy", null);
-                        builder.show();
-                    }
-                }
-            });
-
-            exitBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(Activity_Add_Class.this);
-                    builder.setTitle("Xác nhận")
-                            .setMessage("Bạn chưa hoàn thành chỉnh sửa, bạn có chắc chắn muốn thoát?");
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            finish();
-                        }
-                    });
-                    builder.setNegativeButton("Hủy", null);
-                    builder.show();
-                }
-            });
-
+            setupExistingClassData(listClass);
         } else {
-            exitBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            setupNewClassActions();
+        }
+    }
 
-                    AlertDialog.Builder builder = new AlertDialog.Builder(Activity_Add_Class.this);
-                    builder.setTitle("Xác nhận")
-                            .setMessage("Bạn chưa hoàn thành, bạn có chắc chắn muốn thoát?");
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            finish();
-                        }
-                    });
-                    builder.setNegativeButton("Hủy", null);
-                    builder.show();
-                }
-            });
+    private void showDatePicker(boolean isStartDate) {
+        MaterialDatePicker.Builder<Long> builder = MaterialDatePicker.Builder.datePicker();
+        builder.setTitleText("Chọn ngày");
+        MaterialDatePicker<Long> picker = builder.build();
 
-            doneBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (className.getText().toString().equals("")
-                            || startDate.getText().toString().equals("") || idTeacher.getText().toString().equals("")
-                            || endDate.getText().toString().equals("") || program.getText().toString().equals("")
-                            || staffID.getText().toString().equals("")) {
-                        Toast.makeText(Activity_Add_Class.this, "Hãy nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
-                    } else {
+        picker.addOnPositiveButtonClickListener(selection -> {
+            LocalDate date = LocalDate.ofEpochDay(selection / (1000 * 60 * 60 * 24));
+            String formattedDate = String.format("%02d/%02d/%d", date.getDayOfMonth(), date.getMonthValue(), date.getYear());
+            if (isStartDate) {
+                startDate.setText(formattedDate);
+            } else {
+                endDate.setText(formattedDate);
+            }
+        });
 
-                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy");
+        picker.show(getSupportFragmentManager(), "DATE_PICKER");
+    }
 
-                        LocalDate date1 = LocalDate.parse(startDate.getText().toString(), formatter);
-                        LocalDate date2 = LocalDate.parse(endDate.getText().toString(), formatter);
-                        if (date1.isAfter(date2)) {
-                            Toast.makeText(Activity_Add_Class.this, "Ngày kết thúc lớp học " +
-                                    "phải sau ngày bắt đầu!", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
+    private void setupExistingClassData(List<ClassDTO> listClass) {
+        className.setText(listClass.get(0).getClassName());
+        startDate.setText(listClass.get(0).getStartDate());
+        endDate.setText(listClass.get(0).getEndDate());
 
-                        List<ProgramDTO> programSelect = ProgramDAO.getInstance(Activity_Add_Class.this).SelectProgram(
-                                Activity_Add_Class.this, "NAME = ? AND STATUS = ?",
-                                new String[] {program.getText().toString(), "0"});
-                        List<TeacherDTO> teacher = TeacherDAO.getInstance(Activity_Add_Class.this).SelectTeacher(
-                                Activity_Add_Class.this, "FULLNAME = ? AND STATUS = ?",
-                                new String[] {idTeacher.getText().toString(), "0"});
-                        List<StaffDTO> staff = StaffDAO.getInstance(Activity_Add_Class.this).SelectStaffVer2(
-                                Activity_Add_Class.this, "FULLNAME = ? AND STATUS = ?",
-                                new String[] {staffID.getText().toString(), "0"});
+        // Fetch and set other data (program, teacher, staff)
+        String idProgramText = listClass.get(0).getIdProgram();
+        List<ProgramDTO> programArr = ProgramDAO.getInstance(Activity_Add_Class.this).SelectProgram(
+                Activity_Add_Class.this, "ID_PROGRAM = ? AND STATUS = ?", new String[] {idProgramText, "0"});
+        String idTeacherText = listClass.get(0).getIdTeacher();
+        List<TeacherDTO> teacherArr = TeacherDAO.getInstance(Activity_Add_Class.this).SelectTeacher(
+                Activity_Add_Class.this, "ID_TEACHER = ? AND STATUS = ?", new String[] {idTeacherText, "0"});
+        String idStaff = listClass.get(0).getIdStaff();
+        List<StaffDTO> staffArr = StaffDAO.getInstance(Activity_Add_Class.this).SelectStaffVer2(
+                Activity_Add_Class.this, "ID_STAFF = ? AND STATUS = ?", new String[] {idStaff, "0"});
 
-                        String errorMessage1 = "";
-                        String errorMessage2 = "";
-                        boolean flag = true;
-                        if (teacher.size() <= 0) {
-                            errorMessage1 = "sai tên giảng viên";
-                            flag = false;
-                        }
-                        if (staff.size() <= 0 )  {
-                            errorMessage2 = "sai tên nhân viên quản lý";
-                            flag = false;
-                        }
+        staffID.setText(staffArr.get(0).getFullName());
+        idTeacher.setText(teacherArr.get(0).getFullName());
+        program.setText(programArr.get(0).getNameProgram());
 
-                        if (!flag && !errorMessage1.equals("") && !errorMessage2.equals("")) {
-                            Toast.makeText(Activity_Add_Class.this, "Bạn đã nhập " +
-                                    errorMessage1 + " và " + errorMessage2, Toast.LENGTH_SHORT).show();
-                            return;
-                        }
+        doneBtn.setOnClickListener(v -> {
+            if (validateInputs()) {
+                updateClass(listClass.get(0).getClassID());
+            }
+        });
 
-                        if (!flag) {
-                            Toast.makeText(Activity_Add_Class.this, "Bạn đã nhập " +
-                                   errorMessage1 + errorMessage2, Toast.LENGTH_SHORT).show();
-                            return;
-                        }
+        exitBtn.setOnClickListener(v -> showExitConfirmation());
+    }
 
-                        ClassDTO classNew = new ClassDTO(null, className.getText().toString(),
-                                startDate.getText().toString(), endDate.getText().toString(),
-                                programSelect.get(0).getIdProgram(), teacher.get(0).getIdTeacher(),
-                                staff.get(0).getIdStaff(), "0", "desiredColor"); // Thêm tham số color
+    private void setupNewClassActions() {
+        doneBtn.setOnClickListener(v -> {
+            if (validateInputs()) {
+                createNewClass();
+            }
+        });
 
-                        try {
-                            int rowEffect = ClassDAO.getInstance(Activity_Add_Class.this).InsertClass(
-                                    Activity_Add_Class.this, classNew);
-                            if (rowEffect > 0) {
-                                Toast.makeText(Activity_Add_Class.this, "Thêm lớp học mới thành công",
-                                        Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(Activity_Add_Class.this, "Thêm lớp học mới thất bại",
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (Exception e) {
-                            Log.d("Add new class failed", "failed");
-                        }
+        exitBtn.setOnClickListener(v -> showExitConfirmation());
+    }
 
-                        String idClassJustAdd = "";
-                        List<ClassDTO> classJustAdd = ClassDAO.getInstance(Activity_Add_Class.this)
-                                .selectClass(Activity_Add_Class.this,
-                                        "NAME = ? AND START_DATE = ? AND END_DATE = ? AND STATUS = ?",
-                                        new String[] {classNew.getClassName(),
-                                        classNew.getStartDate(), classNew.getEndDate(), "0"});
-                        if (classJustAdd.size() > 0) {
-                            idClassJustAdd = classJustAdd.get(0).getClassID();
-                        }
-
-                        ExaminationDTO examination = new ExaminationDTO(null,
-                                "Kỳ thi tổng két cuối khóa", "Chuẩn format quốc tế",
-                                endDate.getText().toString(), idClassJustAdd, "B1.11");
-                        int rowEffectAddExam = ExaminationDAO.getInstance(Activity_Add_Class.this)
-                                        .InsertExamination(Activity_Add_Class.this, examination);
-                        if (rowEffectAddExam > 0) {
-                            Log.d("Insert new exam", "success");
-                        } else {
-                            Log.d("Insert new exam", "failed");
-                        }
-
-                        className.setText("");
-                        startDate.setText("");
-                        endDate.setText("");
-                        idTeacher.setText("");
-                        staffID.setText("");
-                    }
-                }
-            });
-
+    private boolean validateInputs() {
+        if (className.getText().toString().isEmpty() || startDate.getText().toString().isEmpty() ||
+                endDate.getText().toString().isEmpty() || staffID.getText().toString().isEmpty() ||
+                program.getText().toString().isEmpty() || idTeacher.getText().toString().isEmpty()) {
+            Toast.makeText(Activity_Add_Class.this, "Hãy nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+            return false;
         }
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate date1 = LocalDate.parse(startDate.getText().toString(), formatter);
+        LocalDate date2 = LocalDate.parse(endDate.getText().toString(), formatter);
+
+        if (date1.isAfter(date2)) {
+            Toast.makeText(Activity_Add_Class.this, "Ngày kết thúc lớp học phải sau ngày bắt đầu!", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
+    }
+
+    private void updateClass(String classID) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(Activity_Add_Class.this);
+        builder.setTitle("Xác nhận")
+                .setMessage("Bạn có chắc chắn muốn sửa thông tin lớp học này không?")
+                .setPositiveButton("OK", (dialog, which) -> {
+                    // Logic for updating the class
+                    List<ProgramDTO> programSelect = ProgramDAO.getInstance(Activity_Add_Class.this).SelectProgram(
+                            Activity_Add_Class.this, "NAME = ? AND STATUS = ?", new String[] {program.getText().toString(), "0"});
+                    List<TeacherDTO> teacher = TeacherDAO.getInstance(Activity_Add_Class.this).SelectTeacher(
+                            Activity_Add_Class.this, "FULLNAME = ? AND STATUS = ?", new String[] {idTeacher.getText().toString(), "0"});
+                    List<StaffDTO> staff = StaffDAO.getInstance(Activity_Add_Class.this).SelectStaffVer2(
+                            Activity_Add_Class.this, "FULLNAME = ? AND STATUS = ?", new String[] {staffID.getText().toString(), "0"});
+
+                    if (programSelect.isEmpty() || teacher.isEmpty() || staff.isEmpty()) {
+                        Toast.makeText(Activity_Add_Class.this, "Thông tin không hợp lệ", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    ClassDTO classUpdate = new ClassDTO(classID, className.getText().toString(),
+                            startDate.getText().toString(), endDate.getText().toString(),
+                            programSelect.get(0).getIdProgram(), teacher.get(0).getIdTeacher(),
+                            staff.get(0).getIdStaff(), "0", "desiredColor");
+
+                    try {
+                        int rowEffect = ClassDAO.getInstance(Activity_Add_Class.this).UpdateClass(
+                                Activity_Add_Class.this, classUpdate, "ID_CLASS = ? AND STATUS = ?", new String[] {classID, "0"});
+                        if (rowEffect > 0) {
+                            Toast.makeText(Activity_Add_Class.this, "Sửa thông tin lớp học thành công", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Log.d("Update class failed", "failed");
+                        }
+                    } catch (Exception e) {
+                        Log.d("Update class error: ", e.getMessage());
+                    }
+                })
+                .setNegativeButton("Hủy", null)
+                .show();
+    }
+
+    private void createNewClass() {
+        List<ProgramDTO> programSelect = ProgramDAO.getInstance(Activity_Add_Class.this).SelectProgram(
+                Activity_Add_Class.this, "NAME = ? AND STATUS = ?", new String[] {program.getText().toString(), "0"});
+        List<TeacherDTO> teacher = TeacherDAO.getInstance(Activity_Add_Class.this).SelectTeacher(
+                Activity_Add_Class.this, "FULLNAME = ? AND STATUS = ?", new String[] {idTeacher.getText().toString(), "0"});
+        List<StaffDTO> staff = StaffDAO.getInstance(Activity_Add_Class.this).SelectStaffVer2(
+                Activity_Add_Class.this, "FULLNAME = ? AND STATUS = ?", new String[] {staffID.getText().toString(), "0"});
+
+        if (programSelect.isEmpty() || teacher.isEmpty() || staff.isEmpty()) {
+            Toast.makeText(Activity_Add_Class.this, "Thông tin không hợp lệ", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        ClassDTO classNew = new ClassDTO(null, className.getText().toString(),
+                startDate.getText().toString(), endDate.getText().toString(),
+                programSelect.get(0).getIdProgram(), teacher.get(0).getIdTeacher(),
+                staff.get(0).getIdStaff(), "0", "desiredColor");
+
+        try {
+            int rowEffect = ClassDAO.getInstance(Activity_Add_Class.this).InsertClass(Activity_Add_Class.this, classNew);
+            if (rowEffect > 0) {
+                Toast.makeText(Activity_Add_Class.this, "Thêm lớp học mới thành công", Toast.LENGTH_SHORT).show();
+                resetFields();
+            } else {
+                Toast.makeText(Activity_Add_Class.this, "Thêm lớp học mới thất bại", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Log.d("Add new class failed", "failed: " + e.getMessage());
+        }
+    }
+
+    private void resetFields() {
+        className.setText("");
+        startDate.setText("");
+        endDate.setText("");
+        idTeacher.setText("");
+        staffID.setText("");
+    }
+
+    private void showExitConfirmation() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(Activity_Add_Class.this);
+        builder.setTitle("Xác nhận")
+                .setMessage("Bạn chưa hoàn thành chỉnh sửa, bạn có chắc chắn muốn thoát?")
+                .setPositiveButton("OK", (dialog, which) -> finish())
+                .setNegativeButton("Hủy", null)
+                .show();
     }
 
     @Override
