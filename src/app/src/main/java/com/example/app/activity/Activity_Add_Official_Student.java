@@ -141,7 +141,7 @@ public class Activity_Add_Official_Student extends AppCompatActivity {
                             new String[] {studentId, List_Adapter.idClassClick, "0"});
             List<CollectionTuitionFeesDTO> showTuition = CollectionTuitionFeesDAO.getInstance(Activity_Add_Official_Student.this)
                             .SelectCollectionTuitionFeesToGetList(Activity_Add_Official_Student.this,
-                                    "ID_TEACHING = ? AND STATUS = ?",
+                                    "ID_STUDENT = ? AND STATUS = ?",
                                     new String[] {getTeachingToShowTuition.get(0).getIdTeaching(), "0"});
             if (showTuition.size() != 0) {
                 totalMoney.setText(showTuition.get(0).getMoney());
